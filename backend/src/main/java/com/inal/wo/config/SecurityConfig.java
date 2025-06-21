@@ -21,13 +21,22 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtFilter;
+    private static final String[] AUTH_WHITELIST = {
+            "/authenticate",
+            "/swagger-resources/",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/api/v1/app/user/auth/",
+            "/api/auth/**", 
+            "/uploads/**"
+    };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/auth/**", "/uploads/**").permitAll()
+                    .requestMatchers(AUTH_WHITELIST).permitAll()
                     .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
