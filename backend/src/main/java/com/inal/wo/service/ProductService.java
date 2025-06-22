@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -112,6 +113,27 @@ public class ProductService {
 
         productRepository.save(product);
 
+
+        return buildProductRes(product);
+    }
+
+    public List<ProductResponse> getAllProductActive() {
+        log.info("request get all product active");
+
+        List<Product> products = productRepository.findAllByActiveStatus(true);
+        List<ProductResponse> response = new ArrayList<>();
+        for (Product prod : products) {
+            ProductResponse data = buildProductRes(prod);
+            response.add(data);
+        }
+        return response;
+    }
+
+    public ProductResponse getProductActiveById(Long idProduct) {
+        log.info("request get product Active by id {}", idProduct);
+        Product product = productRepository
+            .findByIdAndActiveStatus(idProduct, true).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, PRODUCT_NOT_FOUND_MESSAGE));
 
         return buildProductRes(product);
     }

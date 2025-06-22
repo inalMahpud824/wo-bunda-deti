@@ -8,11 +8,13 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.inal.wo.security.JwtAuthenticationFilter;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -22,13 +24,12 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtFilter;
     private static final String[] AUTH_WHITELIST = {
-            "/authenticate",
             "/swagger-resources/",
             "/swagger-ui/**",
             "/v3/api-docs/**",
-            "/api/v1/app/user/auth/",
             "/api/auth/**", 
-            "/uploads/**"
+            "/uploads/**",
+            "/public/**"
     };
 
     @Bean
@@ -40,6 +41,7 @@ public class SecurityConfig {
                     .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedEntryPoint()))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
@@ -47,6 +49,16 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    
+    /**
+     * handle response if unauthorized.
+     */
+    @Bean
+    public AuthenticationEntryPoint unauthorizedEntryPoint() {
+        return (request, response, authException) -> response.sendError(
+            HttpServletResponse.SC_UNAUTHORIZED, "This resource requires an access token");
     }
   
 }
