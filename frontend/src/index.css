@@ -1,6 +1,17 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+:root {
+  --color-primary: #fef9f5;
+  --color-secondary: #d4af37;
+  --color-accent: #FFF3EF;
+}
+
+.font-logo {
+  font-family: "Cinzel Decorative", serif;
+  font-style: italic;
+  color: #d4af37;
+}
 
 .head-font {
   font-family: "Playfair Display", serif;

@@ -1,11 +1,14 @@
-const WrapperNavbar = ({children}) => {
+import { Link } from "react-router-dom";
+
+// import logo from "../assets/img/logo.png"
+const WrapperNavbar = ({ children }) => {
   return (
     <div className="drawer drawer-end">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col">
+      <div className="drawer-content flex flex-col bg-primary text-black relative">
         {/* Navbar */}
-        <div className="navbar flex justify-between bg-[#fef9f5] w-full text-black z-10 md:px-25">
-          <div className="mx-2 lg:flex-1 px-2">Navbar Title</div>
+        <div className="navbar flex justify-between bg-[#fef9f5] w-full text-black z-10 md:px-25 sticky top-0">
+          <Link to={"/"} className="mx-2 lg:flex-1 px-2 text-4xl font-logo">Bunda Deti</Link>
           <div className="lg:hidden">
             <label htmlFor="my-drawer-3" aria-label="open sidebar" className="btn btn-square btn-ghost">
               <svg
@@ -24,23 +27,24 @@ const WrapperNavbar = ({children}) => {
             </label>
           </div>
           <div className="hidden flex-none lg:block">
-            <ul className="menu menu-horizontal">
+            <ul className="menu menu-horizontal ">
               {/* Navbar menu content here */}
-              <li><a>Daftar Layanan</a></li>
-              <li><a>Galery</a></li>
-              <li><a>Login</a></li>
+              <li><Link to={"/service"}>Daftar Layanan</Link></li>
+              <li><Link to={"/galery"} >Galery</Link></li>
+              <li><Link to={"login"}>Login</Link></li>
             </ul>
           </div>
         </div>
         {/* Page content here */}
         {children}
       </div>
-      <div className="drawer-side">
+      <div className="drawer-side ">
         <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
-        <ul className="menu bg-base-200 min-h-full w-80 p-4">
+        <ul className="menu text-black min-h-full w-80 p-4 bg-primary pt-24 ">
           {/* Sidebar content here */}
-          <li><a>Sidebar Item 1</a></li>
-          <li><a>Sidebar Item 2</a></li>
+          <li><Link to={"/service"}>Daftar Layanan</Link></li>
+          <li><Link to={"/galery"} >Galery</Link></li>
+          <li><Link to={"login"}>Login</Link></li>
         </ul>
       </div>
     </div>
