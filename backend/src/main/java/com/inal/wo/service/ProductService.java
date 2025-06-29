@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,6 +45,8 @@ public class ProductService {
         data.setActiveStatus(true);
         data.setName(request.getName());
         data.setPrice(request.getPrice());
+        data.setDescriptionDetail(request.getDetailDescription());
+        data.setDescriptionShort(request.getShortDescription());
         data.setCreatedAt(LocalDateTime.now());
         data.setUpdateAt(LocalDateTime.now());
 
@@ -100,6 +101,8 @@ public class ProductService {
         
         product.setUpdateAt(LocalDateTime.now());
         product.setName(request.getName());
+        product.setDescriptionDetail(request.getDetailDescription());
+        product.setDescriptionShort(request.getShortDescription());
         product.setPrice(request.getPrice());
 
         MultipartFile fileNew = request.getPhoto();
@@ -171,6 +174,8 @@ public class ProductService {
         res.setPhoto(product.getPhoto());
         res.setPrice(product.getPrice());
         res.setProductName(product.getName());
+        res.setShortDescription(product.getDescriptionShort());
+        res.setDetailDescription(product.getDescriptionDetail());
         return res;
     }
 }

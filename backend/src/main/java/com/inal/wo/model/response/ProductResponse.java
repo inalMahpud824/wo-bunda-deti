@@ -18,4 +18,6 @@ public class ProductResponse {
     private BigDecimal price;
     private Boolean activeStatus;
     private String photo;
+    private String detailDescription;
+    private String shortDescription;
 }

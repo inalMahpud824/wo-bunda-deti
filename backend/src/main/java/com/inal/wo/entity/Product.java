@@ -30,6 +30,12 @@ public class Product {
     @Column(name = "price")
     private BigDecimal price;
 
+    @Column(name = "description_short")
+    private String descriptionShort;
+
+    @Column(name = "description_detail")
+    private String descriptionDetail;
+
     @Column(name = "active_status")
     private Boolean activeStatus;
 

@@ -17,8 +17,15 @@ public class ProductRequest {
   
     @NotBlank(message = "nama product tidak boleh kosong")
     private String name;
+
     @NotNull(message = "harga product tidak boleh kosong")
     private BigDecimal price;
+
+    @NotNull(message = "deskripsi singkat tidak boleh kosong")
+    private String shortDescription;
+
+    private String detailDescription;
+
     @NotNull(message = "photo tidak boleh kosong")
     private MultipartFile photo;
 }
