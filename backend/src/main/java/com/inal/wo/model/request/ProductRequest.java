@@ -1,9 +1,7 @@
 package com.inal.wo.model.request;
 
 import java.math.BigDecimal;
-
 import org.springframework.web.multipart.MultipartFile;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -26,6 +24,5 @@ public class ProductRequest {
 
     private String detailDescription;
 
-    @NotNull(message = "photo tidak boleh kosong")
-    private MultipartFile photo;
+    private MultipartFile photo = null;
 }

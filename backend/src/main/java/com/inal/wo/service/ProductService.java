@@ -94,7 +94,7 @@ public class ProductService {
 
     @Transactional
     public ProductResponse updateProduct(Long idProduct, ProductRequest request) {
-        log.info("Request update product with id {}", idProduct);
+        log.info("Request update product with id {} and request {}", idProduct, request);
 
         Product product = productRepository.findById(idProduct).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, PRODUCT_NOT_FOUND_MESSAGE));
@@ -106,7 +106,7 @@ public class ProductService {
         product.setPrice(request.getPrice());
 
         MultipartFile fileNew = request.getPhoto();
-        if(!fileNew.isEmpty() && fileNew != null) {
+        if(fileNew != null && !fileNew.isEmpty()) {
             // hapus file lama
             deleteFile(product);
 
@@ -120,6 +120,17 @@ public class ProductService {
         return buildProductRes(product);
     }
 
+    @Transactional
+    public ProductResponse updateStatusProduct(Long idProduct, Boolean status) {
+        log.info("Request update status product with id {}", idProduct);
+        Product product = productRepository.findById(idProduct).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, PRODUCT_NOT_FOUND_MESSAGE));
+        product.setActiveStatus(status);
+        productRepository.save(product);
+        return buildProductRes(product);
+
+    }
+    
     public List<ProductResponse> getAllProductActive() {
         log.info("request get all product active");
 
@@ -156,6 +167,9 @@ public class ProductService {
     }
 
     private void saveFile(ProductRequest request, Product product) {
+        if(request.getPhoto() == null || request.getPhoto().isEmpty()) {
+            return;
+        }
         try {
             String fileName = UUID.randomUUID() + "_" + request.getPhoto().getOriginalFilename();
             Path filePath = Paths.get(UPLOAD_DIR, fileName);
