@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
+import useTokenValidation from "../hooks/useTokenValidation";
 
 // import logo from "../assets/img/logo.png"
 const WrapperNavbar = ({ children }) => {
+  const { login } = useTokenValidation()
   return (
     <div className="drawer drawer-end">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
@@ -31,7 +33,11 @@ const WrapperNavbar = ({ children }) => {
               {/* Navbar menu content here */}
               <li><Link to={"/service"}>Daftar Layanan</Link></li>
               <li><Link to={"/galery"} >Galery</Link></li>
+              {login ? (
+                <li><Link to={"/dashboard"}>Dashboard</Link></li>  
+              ) : (
               <li><Link to={"login"}>Login</Link></li>
+              )}
             </ul>
           </div>
         </div>
@@ -44,7 +50,11 @@ const WrapperNavbar = ({ children }) => {
           {/* Sidebar content here */}
           <li><Link to={"/service"}>Daftar Layanan</Link></li>
           <li><Link to={"/galery"} >Galery</Link></li>
-          <li><Link to={"login"}>Login</Link></li>
+          {login ? (
+            <li><Link to={"/dashboard"}>Dashboard</Link></li>
+          ) : (
+            <li><Link to={"login"}>Login</Link></li>
+          )}
         </ul>
       </div>
     </div>

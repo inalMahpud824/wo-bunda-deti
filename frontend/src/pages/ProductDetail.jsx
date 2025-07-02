@@ -18,7 +18,6 @@ const ProductDetail = () => {
       fetchData(id)
     }
   }, [id])
-  console.log(product)
   return (
     <WrapperNavbar>
       <div className="flex md:flex-row flex-col md:gap-7 md:items-start md:px-24 bg-primary text-black p-7 relative">

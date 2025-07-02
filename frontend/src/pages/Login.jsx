@@ -1,28 +1,70 @@
 import { Link } from "react-router-dom"
 import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { instance } from "../axios";
+import useTokenValidation from "../hooks/useTokenValidation";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [input, setInput] = useState()
+  const {login} = useTokenValidation()
+
+  const handelChange = (e) => {
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value,
+    });
+  };
+  
+  useEffect(() => {
+    if (login) {
+      window.location.href = "/dashboard";
+      return;
+    }
+  }, [login]);
+
+  const handleSubmit = async (e) => {
+    // setLoading(true);
+    e.preventDefault();
+    try {
+      console.log(input)
+      const result = await instance.post("api/auth/login", input);
+      console.log(result);
+
+      if (result) {
+        localStorage.setItem("token", result.data.token);
+        window.location.href = "/dashboard";
+      }
+      // setLoading(false);
+    } catch (e) {
+      const errorMessage =
+        typeof e.response?.data?.message === "string"
+          ? e.response.data.message
+          : "Internal Server Error";
+      console.log(errorMessage)
+      // setError(errorMessage);
+      // setLoading(false);
+    }
+  };
   return (
     <>
       <section className="w-full min-h-screen bg-white flex flex-col items-center justify-center relative">
         <form
           action=""
-          // onSubmit={handelSubmit}
+          onSubmit={handleSubmit}
           className="md:w-[37rem] h-screen md:h-fit w-full py-4 px-10 shadow-lg flex flex-col justify-center text-gray-700"
         >
           <Link to={"/"} className="text-center text-4xl font-logo ">Bunda Deti</Link>
           <h1 className="text-center text-gray-700 text-xl font-bold">Masuk</h1>
           <label htmlFor="email" className="py-2 font-semibold">
-            Email
+            username
           </label>
           <input
-            type="email"
-            placeholder="Masukan Email"
-            name="email"
-            // onChange={handelChange}
+            type="text"
+            placeholder="Masukan username"
+            name="username"
+            onChange={handelChange}
             className="w-full border px-4 py-2 outline-none bg-white rounded-full focus-within:border-black"
             required
           />
@@ -32,7 +74,7 @@ const Login = () => {
             id="password"
             showPassword={showPassword}
             setShowPassword={setShowPassword}
-          // handelChange={handelChange}
+            handelChange={handelChange}
           />
           <button
             className="py-2 bg-secondary text-white rounded-full px-[3rem] font-semibold hover:shadow-md hover:font-bold hover:cursor-pointer mt-7"

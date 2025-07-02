@@ -1,23 +1,41 @@
 import { useEffect, useState } from "react"
-import WrapperDashboard from "../../components/WrapperDashboard"
-import { instance } from "../../axios"
-import { formatPrice } from "../../utils/formatPrice"
+import { instance } from "../../../axios"
+import { formatPrice } from "../../../utils/formatPrice"
+import WrapperDashboard from "../../../components/WrapperDashboard"
+import { Link } from "react-router-dom"
+import ModalConfirm from "../../../components/modal/ModalConfirm"
 
 const DashboardProduct = () => {
-     const [product, setProduct] = useState([])
-      useEffect(() => {
-        async function fetchData() {
-          const payload = await instance.get("/public/product")
-          const data = payload.data
-          setProduct(data)
-        }
-        fetchData()
-      }, [])
+  const [product, setProduct] = useState([])
+  const [idDelete, setIdDelete] = useState(null)
+  async function fetchData() {
+    const payload = await instance.get("/product")
+    const data = payload.data
+    setProduct(data)
+  }
+  useEffect(() => {
+    fetchData()
+  }, [])
+  const handleDelete = async (id) => {
+    console.log(id)
+    try {
+      const result = await instance.delete(`/product/${id}`)
+      console.log(result)
+      alert("hapus data sukses")
+      fetchData()
+      setIdDelete(null)
+    } catch (error) {
+      console.error(error)
+    }
+  }
   return (
     <WrapperDashboard tabActive={"product"}>
+      <ModalConfirm description={"apakah anda yankin untuk menghapus Layanan ini?"}
+        title={"Konfirmasi"} id="modal-confirm" funtionOnConfirm={() => handleDelete(idDelete)} />
       <div className="w-full min-h-screen bg-white">
         <div className="w-full px-7 pt-4 pb-2 text-gray-700">
           <div className="overflow-x-auto">
+            <Link to={"form"} className="btn btn-secondary text-white mb-5">+ Tambah</Link>
             <table className="table">
               {/* head */}
               <thead className="bg-[#EDEDF0] text-black font-semibold text-base ">
@@ -57,18 +75,18 @@ const DashboardProduct = () => {
                       </td>
                       <td className="text-center ">
                         <div className="lg:flex lg:items-center">
-                          <button
+                          <Link
                             className="btn btn-secondary text-white hover:bg-gray-400 border-none my-1 lg:my-0 mx-3 btn-sm"
-                            // onClick={() => {
-                            //   setIdEdit(item.id);
-                            //   setEditProductAndService(true);
-                            // }}
+                            to={`form/${item.id}`}
                           >
                             Ubah
-                          </button>
+                          </Link>
                           <button
                             className="btn btn-error text-white btn-sm"
-                          //   onClick={() => handleDelete(item.id)}
+                            onClick={() => {
+                              setIdDelete(item.id)
+                              document.getElementById("modal-confirm").showModal();
+                            }}
                           >
                             Hapus
                           </button>

@@ -12,6 +12,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 const WrapperDashboard = ({ children, tabActive, }) => {
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = "/login"
+  }
   return(
     <>
       <div className="bg-white max-h-screen flex ">
@@ -52,7 +56,7 @@ const WrapperDashboard = ({ children, tabActive, }) => {
             
               <>
                 <div
-                  // onClick={handleLogout}
+                  onClick={handleLogout}
                   className={`flex items-center justify-start py-4 pl-3 hover:bg-secondary cursor-pointer hover:text-white `}
                 >
                   <FontAwesomeIcon icon={faPowerOff} />
@@ -164,7 +168,7 @@ const WrapperDashboard = ({ children, tabActive, }) => {
                 
                   <>
                     <div
-                      // onClick={handleLogout}
+                      onClick={handleLogout}
                       className={`flex items-center justify-start py-4 pl-3 hover:bg-secondary cursor-pointer hover:text-white `}
                     >
                       <FontAwesomeIcon icon={faPowerOff} />
