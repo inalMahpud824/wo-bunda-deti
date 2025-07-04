@@ -18,7 +18,6 @@ export const LandingPage = () => {
     }
     fetchData();
   }, []);
-  console.log(product);
   return (
     <WrapperNavbar>
       <HeroSection />

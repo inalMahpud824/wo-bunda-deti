@@ -1,10 +1,34 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faSquareWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import { useEffect } from "react";
+import { instance } from "../axios";
+import { useContact } from "../store/contactStore";
 
 const ContactWA = () => {
-  return(
+  const { 
+    phoneNumber,
+    setPhoneNumber,
+    setBankName,
+    setAccountNumber,
+    setOwnerAccountName } = useContact()
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const result = await instance.get("/public/contact")
+        const data = result.data[0]
+        setAccountNumber(data.accountNumber)
+        setOwnerAccountName(data.ownerNameAccount)
+        setBankName(data.bankName)
+        setPhoneNumber(data.phoneNumber)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetch()
+  }, [setAccountNumber, setOwnerAccountName, setBankName, setPhoneNumber])
+  return (
     <a
-      href="https://api.whatsapp.com/send?phone=088901348151"
+      href={`https://wa.me/${phoneNumber}`}
       target="_blank"
     >
       <FontAwesomeIcon

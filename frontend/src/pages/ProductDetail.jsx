@@ -1,13 +1,16 @@
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import WrapperNavbar from "../components/WrapperNavbar"
 import { useEffect, useState } from "react";
 import { baseURL, instance } from "../axios";
 import { formatPrice } from "../utils/formatPrice";
 import Footer from "../components/Footer";
+import { useContact } from "../store/contactStore";
+import ContactWA from "../components/ContactWA";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState()
+  const {phoneNumber} = useContact()
   useEffect(() => {
     async function fetchData(id) {
       const payload = await instance.get(`/public/product/${id}`)
@@ -37,15 +40,16 @@ const ProductDetail = () => {
               </div>
               <div className="flex md:flex-col flex-row justify-center md:items-center md:justify-around">
                 <div className="flex gap-3 justify-center items-center md:pt-7 md:w-full px-2">
-                  <button className="btn md:btn-md btn-sm btn-secondary md:w-1/2 text-white">Beli Sekarang</button>
+                  <Link to={`/service/${id}/order`} className="btn md:btn-md btn-sm btn-secondary md:w-1/2 text-white">Beli Sekarang</Link>
                   <button className="btn md:btn-md btn-sm btn-accent md:w-1/2 text-black">+ Keranjang</button>
                 </div>
-                <button className="btn md:btn-md btn-sm btn-secondary text-white md:mt-4 md:w-full">Chat Admin</button>
+                <a href={`https://wa.me/${phoneNumber}`} target="_blank" className="btn md:btn-md btn-sm btn-secondary text-white md:mt-4 md:w-full">Chat Admin</a>
               </div>
             </div>
           </>
         )}
       </div>
+      <ContactWA />
       <Footer />
     </WrapperNavbar>
   )

@@ -29,11 +29,14 @@ public class ContactService {
 
     @Transactional
     public Contact updateContact(Long id, ContactRequest request) {
+      log.info("Request update contact with id {} and request data {}", id, request);
       Contact contact = contactRepository.findById(id).orElseThrow(
         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "kontak tidak ditemukan"));
 
-      contact.setEmail(request.getEmail());
       contact.setPhoneNumber(request.getPhoneNumber());
+      contact.setAccountNumber(request.getAccountNumber());
+      contact.setBankName(request.getBankName());
+      contact.setOwnerNameAccount(request.getOwnerNameAccount());
 
       contactRepository.save(contact);
       return contact;

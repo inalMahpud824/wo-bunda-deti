@@ -10,5 +10,7 @@ import lombok.NoArgsConstructor;
 public class ContactRequest {
   
   private String phoneNumber;
-  private String email;
+  private String bankName;
+  private String accountNumber;
+  private String ownerNameAccount;
 }

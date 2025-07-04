@@ -24,6 +24,12 @@ public class Contact {
   @Column(name = "phone_number")
   private String phoneNumber;
 
-  @Column(name = "email")
-  private String email;
+  @Column(name = "bank_name")
+  private String bankName;
+
+  @Column(name = "account_number")
+  private String accountNumber;
+
+  @Column(name = "owner_name_account")
+  private String ownerNameAccount;
 }
