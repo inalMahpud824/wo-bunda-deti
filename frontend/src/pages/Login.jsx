@@ -4,11 +4,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { instance } from "../axios";
 import useTokenValidation from "../hooks/useTokenValidation";
+import { ModalError } from "../components/modal/ModalError";
+import { Loading } from "../components/loading/Loading";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [input, setInput] = useState()
-  const {login} = useTokenValidation()
+  const [error, setError] = useState(null)
+  const { login } = useTokenValidation()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handelChange = (e) => {
     setInput({
@@ -16,7 +20,7 @@ const Login = () => {
       [e.target.name]: e.target.value,
     });
   };
-  
+
   useEffect(() => {
     if (login) {
       window.location.href = "/dashboard";
@@ -25,31 +29,31 @@ const Login = () => {
   }, [login]);
 
   const handleSubmit = async (e) => {
-    // setLoading(true);
+    setIsLoading(true)
     e.preventDefault();
     try {
-      console.log(input)
       const result = await instance.post("api/auth/login", input);
-      console.log(result);
 
       if (result) {
         localStorage.setItem("token", result.data.token);
         window.location.href = "/dashboard";
       }
-      // setLoading(false);
+      setIsLoading(false)
     } catch (e) {
       const errorMessage =
         typeof e.response?.data?.message === "string"
           ? e.response.data.message
           : "Internal Server Error";
       console.log(errorMessage)
-      // setError(errorMessage);
-      // setLoading(false);
+      setError(errorMessage);
+      setIsLoading(false)
     }
   };
   return (
     <>
+      {isLoading && <Loading />}
       <section className="w-full min-h-screen bg-white flex flex-col items-center justify-center relative">
+      <ModalError error={error} setError={setError} />
         <form
           action=""
           onSubmit={handleSubmit}
