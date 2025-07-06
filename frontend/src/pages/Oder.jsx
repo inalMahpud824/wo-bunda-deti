@@ -15,6 +15,7 @@ import { ModalSuccess } from "../components/modal/ModalSuccess";
 const Order = () => {
   const image = useRef();
   const [product, setProduct] = useState()
+  const [orderStatus, setOrderStatus] = useState([])
   const { id } = useParams()
   const [isLoading, setIsLoading] = useState(false)
   const [dataOrder, setDataOrder] = useState()
@@ -29,8 +30,12 @@ const Order = () => {
     const fetch = async () => {
       setIsLoading(true)
       try {
-        const result = await instance.get(`/public/product/${id}`)
-        setProduct(result.data)
+        const [productRes, orderStatus] = await Promise.all([
+          instance.get(`/public/product/${id}`),
+          instance.get(`/public/order-status`) // ganti sesuai kebutuhan
+        ])
+        setProduct(productRes.data)
+        setOrderStatus(orderStatus.data)
         setIsLoading(false)
       } catch (e) {
         console.error(e)
@@ -48,15 +53,18 @@ const Order = () => {
       [e.target.name]: e.target.value,
     });
   };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+const handleSubmit = async (e) => {
+  e.preventDefault()
+  // console.log("ini daya phoneNumber ")
+  console.log(dataOrder.phoneNumber)
     setIsLoading(true)
     const form = new FormData()
+    const status = orderStatus.find(item => item.statusName == "MENUNGGU")
     form.append("eventDate", dataOrder.eventDate)
     form.append("customerName", dataOrder.customerName)
     form.append("phoneNumber", dataOrder.phoneNumber)
     form.append("address", dataOrder.address)
+    form.append("orderStatusId", status.id)
     if (dataOrder.note) {
       form.append("note", dataOrder.note)
     }
@@ -84,7 +92,8 @@ const Order = () => {
     <>
       {isLoading && <Loading />}
       <WrapperNavbar>
-        <ModalSuccess description={"Berhasil melakukan pemesanan"} title={"Berhasil"} textButton={"Tutup"} id="modal-success" />
+        <ModalSuccess description={`Berhasil melakukan pemesanan, Jangan lupa untuk konfirmasi ke nomer WhatsApp admin ${phoneNumber} atau bisa klik icon whatsApp di pojok kanan bawah`} 
+          title={"Berhasil"} textButton={"Tutup"} id="modal-success" />
         <ModalError error={error} setError={setError}/>
         <div className="w-full px-7 py-7 bg-[#fef9f5] text-black md:px-24">
           <h2 className="font-bold text-xl py-6">Layanan yang di pesan</h2>
@@ -161,7 +170,7 @@ const Order = () => {
               required
               onChange={handelChange}
             />
-            <label htmlFor="phoneNumber " className="font-semibold">
+            <label htmlFor="phoneNumber" className="font-semibold">
               No WhatsApp <FontAwesomeIcon
                 icon={faStarOfLife}
                 className="text-red-500 text-[5px] pb-2"
@@ -169,7 +178,7 @@ const Order = () => {
             </label>
             <input
               id="phoneNumber"
-              name="phoneNumber "
+              name="phoneNumber"
               type="text"
               placeholder="Contoh: 08837123"
               className="input w-full bg-gray-100 my-4"

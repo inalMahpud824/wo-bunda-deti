@@ -21,7 +21,8 @@ export const LandingPage = () => {
   return (
     <WrapperNavbar>
       <HeroSection />
-      <div className="w-full px-7 py-7 bg-[#fef9f5] text-black md:px-24">
+      <div className="w-full container mx-auto px-7 py-7 bg-[#fef9f5] text-black md:px-24">
+        <div className="hero-content text-center">
         <div className="flex lg:flex-row flex-col justify-between md:gap-12 items-center min-h-[100px]">
           <div className="flex flex-col justify-center items-center rounded-xl shadow-lg bg-white p-7">
             <h3 className="text-2xl head-font text-center pb-2">
@@ -50,6 +51,7 @@ export const LandingPage = () => {
             alt="wedding"
             className="lg:w-[20rem] pt-7 lg:p-0 rounded-tl-[100px] rounded-br-[100px] object-cover"
           />
+        </div>
         </div>
         <div className="py-7">
           <h2 className="text-center pb-7 text-4xl head-font">Layanan Kami</h2>

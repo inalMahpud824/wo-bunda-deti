@@ -9,7 +9,8 @@ const WrapperNavbar = ({ children }) => {
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col bg-primary text-black relative">
         {/* Navbar */}
-        <div className="navbar flex justify-between bg-[#fef9f5] w-full text-black z-10 md:px-25 sticky top-0">
+        <div className="bg-[#fef9f5] w-full text-black z-10 md:px-25 sticky top-0">
+          <div className="container mx-auto navbar flex justify-between">
           <Link to={"/"} className="mx-2 lg:flex-1 px-2 text-4xl font-logo">Bunda Deti</Link>
           <div className="lg:hidden">
             <label htmlFor="my-drawer-3" aria-label="open sidebar" className="btn btn-square btn-ghost">
@@ -39,6 +40,8 @@ const WrapperNavbar = ({ children }) => {
               <li><Link to={"/login"}>Login</Link></li>
               )}
             </ul>
+          </div>
+
           </div>
         </div>
         {/* Page content here */}
