@@ -20,14 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import com.inal.wo.entity.Order;
 import com.inal.wo.entity.OrderItem;
+import com.inal.wo.entity.OrderStatus;
 import com.inal.wo.entity.Product;
-import com.inal.wo.model.enums.OrderStatusEnum;
 import com.inal.wo.model.request.ChangeStatusOrderRequest;
 import com.inal.wo.model.request.OrderRequest;
 import com.inal.wo.model.response.ItemOrderResponse;
 import com.inal.wo.model.response.OrderResponse;
 import com.inal.wo.repository.OrderItemRepository;
 import com.inal.wo.repository.OrderRepository;
+import com.inal.wo.repository.OrderStatusRepository;
 import com.inal.wo.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,10 +43,13 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final OrderItemRepository orderItemRepository;
+    private final OrderStatusRepository orderStatusRepository;
   
     @Transactional
     public OrderResponse createOrder(OrderRequest request) {
         log.info("Request create order with data {}", request);
+        OrderStatus status = orderStatusRepository.findById(request.getOrderStatusId()).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Status Order tidak ditemukan"));
 
         // Buat folder jika belum ada
         File dir = new File(UPLOAD_DIR);
@@ -76,7 +80,7 @@ public class OrderService {
         order.setOrderDate(LocalDateTime.now(clock));
         order.setUpdateAt(LocalDateTime.now(clock));
         order.setPhoneNumber(request.getPhoneNumber());
-        order.setStatus(OrderStatusEnum.MENUNGGU);
+        order.setStatus(status);
 
         // simpan gambar bukti pembayaran
         saveFile(request, order);
@@ -115,7 +119,10 @@ public class OrderService {
         Order order = orderRepository.findById(idOrder).orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order tidak ditemukan"));
         
-        order.setStatus(request.getStatus());
+        OrderStatus status = orderStatusRepository.findById(request.getOrderStatusId()).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Status Order tidak ditemukan"));
+        
+        order.setStatus(status);
         order.setUpdateAt(LocalDateTime.now(clock));
         orderRepository.save(order);
         List<OrderItem> orderItems = order.getItems();
@@ -128,6 +135,11 @@ public class OrderService {
         return buildOrderResponse(order, itemRes);
     }
     
+
+    public List<OrderStatus> getAllOrderStatus() {
+        return orderStatusRepository.findAll();
+    }
+
     public List<OrderResponse> getAllOrders() {
         log.info("request get all orders");
         List<Order> orders = orderRepository.findAll();

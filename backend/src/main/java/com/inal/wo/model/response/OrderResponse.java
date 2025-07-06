@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.inal.wo.entity.OrderStatus;
 import com.inal.wo.model.enums.OrderStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +23,7 @@ public class OrderResponse {
     private String address;
     private String phoneNumber;
     private String note;
-    private OrderStatusEnum status;
+    private OrderStatus status;
     private BigDecimal totalPrice;
     private String paymentProof;
     private LocalDateTime orderDate;

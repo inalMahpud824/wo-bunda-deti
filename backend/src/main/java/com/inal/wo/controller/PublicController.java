@@ -3,6 +3,7 @@ package com.inal.wo.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.inal.wo.entity.Contact;
+import com.inal.wo.entity.OrderStatus;
 import com.inal.wo.model.request.OrderRequest;
 import com.inal.wo.model.response.OrderResponse;
 import com.inal.wo.model.response.ProductResponse;
@@ -54,6 +55,12 @@ public class PublicController {
         
         return ResponseEntity.ok(orderService.createOrder(request));
     }
+
+    @GetMapping("/order-status")
+    public ResponseEntity<List<OrderStatus>> getAllOrderStatus() {
+        return ResponseEntity.ok(orderService.getAllOrderStatus());  
+    }
+    
   
   
 

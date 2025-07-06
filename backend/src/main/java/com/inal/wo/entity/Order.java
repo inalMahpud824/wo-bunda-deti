@@ -5,17 +5,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.inal.wo.model.enums.OrderStatusEnum;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -51,9 +48,9 @@ public class Order {
     @Column(name = "note")
     private String note;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private OrderStatusEnum status = OrderStatusEnum.MENUNGGU;
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private OrderStatus status;
 
     @Column(name = "total_price", nullable = false)
     private BigDecimal totalPrice;

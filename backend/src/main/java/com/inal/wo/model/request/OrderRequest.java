@@ -29,6 +29,9 @@ public class OrderRequest {
     @NotBlank
     private String address;
 
+    @NotNull
+    private Long orderStatusId;
+
     private String note;
 
     @NotNull

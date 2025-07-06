@@ -1,7 +1,5 @@
 package com.inal.wo.model.request;
 
-import com.inal.wo.model.enums.OrderStatusEnum;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChangeStatusOrderRequest {
   
-  private OrderStatusEnum status;
+  private Long orderStatusId;
 }
