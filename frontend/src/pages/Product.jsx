@@ -16,7 +16,9 @@ const Product = () => {
     }, [])
   return(
     <WrapperNavbar>
+      <div className="container mx-auto">
       <h2 className="text-center pb-7 text-4xl head-font">Layanan Kami</h2>
+      
       <div className="flex justify-around items-center md:flex-row flex-col gap-5 md:px-25">
         {product && product.length > 0 ? (
           product.map((item, idx) => (
@@ -29,6 +31,7 @@ const Product = () => {
           ))
         ) : (""
         )}
+      </div>
       </div>
       <Footer />
     </WrapperNavbar>

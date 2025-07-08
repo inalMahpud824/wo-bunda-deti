@@ -55,8 +55,6 @@ const Order = () => {
   };
 const handleSubmit = async (e) => {
   e.preventDefault()
-  // console.log("ini daya phoneNumber ")
-  console.log(dataOrder.phoneNumber)
     setIsLoading(true)
     const form = new FormData()
     const status = orderStatus.find(item => item.statusName == "MENUNGGU")

@@ -138,7 +138,7 @@ const DashboardOrder = () => {
                     <div className="flex justify-center items-center gap-2">
                     <ul>
                       {item.itemsOrder.map((itemOrder) => (
-                        <li key={itemOrder.id}>{itemOrder.productName}</li>
+                        <li key={itemOrder.id}>{itemOrder.productName}, </li>
                       ))}
                     </ul>
                     <button type="button" 

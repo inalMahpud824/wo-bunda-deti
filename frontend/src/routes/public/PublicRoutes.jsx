@@ -4,6 +4,7 @@ import Product from "../../pages/Product"
 import ProductDetail from "../../pages/ProductDetail"
 import Login from "../../pages/Login"
 import Order from "../../pages/Oder"
+import Cart from "../../pages/Cart"
 
 export const PublicRoutes = () => {
   return (
@@ -13,6 +14,7 @@ export const PublicRoutes = () => {
       <Route path="/service/:id" element={<ProductDetail />} />
       <Route path="/login" element={<Login />} />
       <Route path="/service/:id/order" element={<Order />} />
+      <Route path="/cart" element={<Cart />} />
     </Routes>
   )
 }

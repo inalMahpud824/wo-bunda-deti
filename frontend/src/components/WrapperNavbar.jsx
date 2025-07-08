@@ -34,10 +34,11 @@ const WrapperNavbar = ({ children }) => {
               {/* Navbar menu content here */}
               <li><Link to={"/service"}>Daftar Layanan</Link></li>
               <li><Link to={"/galery"} >Galery</Link></li>
+                <li><Link to={"/cart"}>Keranjang saya</Link></li>
               {login ? (
                 <li><Link to={"/dashboard"}>Dashboard</Link></li>  
               ) : (
-              <li><Link to={"/login"}>Login</Link></li>
+              <li><Link to={"/login"}>Login Admin</Link></li>
               )}
             </ul>
           </div>
@@ -53,10 +54,11 @@ const WrapperNavbar = ({ children }) => {
           {/* Sidebar content here */}
           <li><Link to={"/service"}>Daftar Layanan</Link></li>
           <li><Link to={"/galery"} >Galery</Link></li>
+          <li><Link to={"/cart"}>Keranjang saya</Link></li>
           {login ? (
             <li><Link to={"/dashboard"}>Dashboard</Link></li>
           ) : (
-            <li><Link to={"login"}>Login</Link></li>
+            <li><Link to={"/login"}>Login Admin</Link></li>
           )}
         </ul>
       </div>

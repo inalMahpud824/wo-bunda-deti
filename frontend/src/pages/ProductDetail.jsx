@@ -21,8 +21,21 @@ const ProductDetail = () => {
       fetchData(id)
     }
   }, [id])
+  const handleAddToCart = () => {
+    const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // Hindari duplikat ID
+    if (!existingCart.includes(product.id)) {
+      existingCart.push(product.id);
+      localStorage.setItem('cart', JSON.stringify(existingCart));
+      alert('Produk berhasil ditambahkan ke keranjang!');
+    } else {
+      alert('Produk sudah ada di keranjang!');
+    }
+  }
   return (
     <WrapperNavbar>
+      <div className="container mx-auto">
       <div className="flex md:flex-row flex-col md:gap-7 md:items-start md:px-24 bg-primary text-black p-7 relative">
         {product && (
           <>
@@ -41,13 +54,14 @@ const ProductDetail = () => {
               <div className="flex md:flex-col flex-row justify-center md:items-center md:justify-around">
                 <div className="flex gap-3 justify-center items-center md:pt-7 md:w-full px-2">
                   <Link to={`/service/${id}/order`} className="btn md:btn-md btn-sm btn-secondary md:w-1/2 text-white">Beli Sekarang</Link>
-                  <button className="btn md:btn-md btn-sm btn-accent md:w-1/2 text-black">+ Keranjang</button>
+                  <button type="button" onClick={handleAddToCart} className="btn md:btn-md btn-sm btn-accent md:w-1/2 text-black">+ Keranjang</button>
                 </div>
                 <a href={`https://wa.me/${phoneNumber}`} target="_blank" className="btn md:btn-md btn-sm btn-secondary text-white md:mt-4 md:w-full">Chat Admin</a>
               </div>
             </div>
           </>
         )}
+      </div>
       </div>
       <ContactWA />
       <Footer />
