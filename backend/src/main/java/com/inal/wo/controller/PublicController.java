@@ -3,11 +3,13 @@ package com.inal.wo.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.inal.wo.entity.Contact;
+import com.inal.wo.entity.Gallery;
 import com.inal.wo.entity.OrderStatus;
 import com.inal.wo.model.request.OrderRequest;
 import com.inal.wo.model.response.OrderResponse;
 import com.inal.wo.model.response.ProductResponse;
 import com.inal.wo.service.ContactService;
+import com.inal.wo.service.GalleryService;
 import com.inal.wo.service.OrderService;
 import com.inal.wo.service.ProductService;
 
@@ -32,6 +34,7 @@ public class PublicController {
     private final ProductService productService;
     private final ContactService contactService;
     private final OrderService orderService;
+    private final GalleryService galleryService;
   
     @GetMapping("/product")
     public ResponseEntity<List<ProductResponse>> getAllProductActive() {
@@ -61,7 +64,12 @@ public class PublicController {
         return ResponseEntity.ok(orderService.getAllOrderStatus());  
     }
     
-  
+    @GetMapping("/gallery")
+    public ResponseEntity<List<Gallery>> getAllGallery() {
+        return ResponseEntity.ok(galleryService.getAllPhotoGallery());  
+    }
+    
+
   
 
 }

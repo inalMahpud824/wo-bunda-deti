@@ -26,12 +26,6 @@ public class Gallery {
     @Column(name = "photo", nullable = false)
     private String photo;
 
-    @Column(name = "title")
-    private String title;
-
-    @Column(name = "description")
-    private String description;
-
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 }
