@@ -20,7 +20,6 @@ const DashboardProduct = () => {
     fetchData()
   }, [])
   const handleDelete = async (id) => {
-    console.log(id)
     try {
       const result = await instance.delete(`/product/${id}`)
       console.log(result)

@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderService {
 
     private final Clock clock;
-    private static final String UPLOAD_DIR = "payment-proof";
+    private static final String UPLOAD_DIR = "uploads";
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final OrderItemRepository orderItemRepository;

@@ -6,6 +6,8 @@ import ProtectedRoute from "../../layout/ProtectedRoute"
 import FormUpdateProduct from "../../pages/dashboard/product/FormUpdateProduct"
 import DashboardContact from "../../pages/dashboard/DashboardContact"
 import DashboardOrder from "../../pages/dashboard/DashboardOrder"
+import DashboardGallery from "../../pages/dashboard/gallery/DashboardGallery"
+import FormAddGallery from "../../pages/dashboard/gallery/FormAddGallery"
 
 const PrivateRoute = () => {
   return (
@@ -17,6 +19,8 @@ const PrivateRoute = () => {
         <Route path="/dashboard/service/form/:id" element={<FormUpdateProduct />} />
         <Route path="/dashboard/contact" element={<DashboardContact />} />
         <Route path="/dashboard/order" element={<DashboardOrder />} />
+        <Route path="/dashboard/gallery" element={<DashboardGallery />} />
+        <Route path="/dashboard/gallery/add" element={<FormAddGallery />} />
       </Route>
     </Routes>
   )
