@@ -142,7 +142,7 @@ public class OrderService {
 
     public List<OrderResponse> getAllOrders() {
         log.info("request get all orders");
-        List<Order> orders = orderRepository.findAll();
+        List<Order> orders = orderRepository.findAllByOrderByOrderDateDesc();
         List<OrderResponse> response = new ArrayList<>();
         for (Order order : orders) {
             List<OrderItem> orderItems = order.getItems();

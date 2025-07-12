@@ -66,7 +66,7 @@ public class GalleryService {
 
   public List<Gallery> getAllPhotoGallery() {
     log.info("request api get all Photo");
-    return galleryRepository.findAll();
+    return galleryRepository.findAllByOrderByCreatedAtDesc();
   }
 
   @Transactional
