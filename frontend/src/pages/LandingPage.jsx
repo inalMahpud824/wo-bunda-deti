@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import ContactWA from "../components/ContactWA";
 import HeroSection2 from "../components/HeroSection2";
 
-export const LandingPage = () => {
+const LandingPage = () => {
   const [product, setProduct] = useState([]);
   const [gallery, setGallery] = useState([])
   useEffect(() => {
@@ -121,3 +121,5 @@ export const LandingPage = () => {
     </WrapperNavbar>
   );
 };
+
+export default LandingPage
