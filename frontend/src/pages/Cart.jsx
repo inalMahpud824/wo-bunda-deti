@@ -260,6 +260,7 @@ const Cart = () => {
                   type="file"
                   name="paymentProof"
                   ref={image}
+                  accept="image/jpeg, image/png, image/jpg"
                   className="file-input file-input-bordered w-full max-w-xs bg-white text-black file-input-secondary"
                   required
                 />

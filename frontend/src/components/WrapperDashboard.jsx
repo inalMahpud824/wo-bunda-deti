@@ -1,14 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBriefcase,
   faBuildingUser,
-  faBusinessTime,
   faClipboardList,
-  faClock,
   faImages,
   faPhoneVolume,
   faPowerOff,
-  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 const WrapperDashboard = ({ children, tabActive, }) => {
@@ -83,11 +79,6 @@ const WrapperDashboard = ({ children, tabActive, }) => {
                   </h1>
                   {/* <p className="text-sm md:text-right">{role}</p> */}
                 </div>
-                <img
-                  src="https://placehold.co/400x400/png"
-                  alt=""
-                  className="object-contain w-[3rem] h-[3rem] rounded-full"
-                />
               </div>
             </div>
 
@@ -129,39 +120,36 @@ const WrapperDashboard = ({ children, tabActive, }) => {
           ></label>
           <div className="min-w-[17rem] min-h-screen block text-gray-700 border bg-gray-50 overflow-y-auto">
             <div className=" text-center py-1">
-              <img
-                // src={logoMaqdis}
-                alt=""
-                className="object-contain w-[11rem] mx-auto pt-5"
-              />
+              <div className=" text-center py-1">
+                <Link to={"/"} className="mx-2 lg:flex-1 px-2 text-4xl font-logo">Bunda Deti</Link>
+              </div>
             </div>
             <div className="text-lg">
               <>
-
                 <>
                   <ListMenuDashboard
-                    text={"Profile Saya"}
-                    icon={faUser}
-                    href={"/dashboard/profile"}
-                    active={tabActive == "profile" ? true : false}
+                    text={"Layanan"}
+                    icon={faBuildingUser}
+                    href={"/dashboard/service"}
+                    active={tabActive == "product" ? true : false}
                   />
                   <ListMenuDashboard
-                    text={"Lamar Posisi"}
-                    icon={faBusinessTime}
-                    href={"/dashboard/apply"}
-                    active={tabActive == "apply" ? true : false}
+                    text={"Gallery"}
+                    icon={faImages}
+                    href={"/dashboard/gallery"}
+                    active={tabActive == "gallery" ? true : false}
                   />
                   <ListMenuDashboard
-                    text={"Absensiku"}
-                    icon={faClock}
-                    href={"/dashboard/absen"}
-                    active={tabActive == "absen" ? true : false}
+                    text={"Kontak"}
+                    icon={faPhoneVolume}
+                    href={"/dashboard/contact"}
+                    active={tabActive == "contact" ? true : false}
                   />
                   <ListMenuDashboard
-                    text={"Project Saya"}
-                    icon={faBriefcase}
-                    href={"/dashboard/task"}
-                    active={tabActive == "task" ? true : false}
+                    text={"Order"}
+                    icon={faClipboardList}
+                    href={"/dashboard/order"}
+                    active={tabActive == "order" ? true : false}
                   />
                 </>
 

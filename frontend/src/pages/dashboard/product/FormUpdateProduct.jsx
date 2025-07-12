@@ -26,7 +26,6 @@ const FormUpdateProduct = () => {
       fetchData(id)
     }
   }, [id])
-  console.log(product)
   const handleSubmit = async (e) => {
     setIsLoading(true);
     e.preventDefault()
@@ -43,7 +42,6 @@ const FormUpdateProduct = () => {
     if(image.current) {
       form.append("photo", image.current.files[0])
     }
-    console.log(form)
     try {
       await instance.put(`/product/${id}`, form, {
         headers: {

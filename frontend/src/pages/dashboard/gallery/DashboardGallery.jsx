@@ -5,6 +5,7 @@ import { ModalSuccess } from "../../../components/modal/ModalSuccess"
 import ModalConfirm from "../../../components/modal/ModalConfirm"
 import { Link } from "react-router-dom"
 import { baseURL, instance } from "../../../axios"
+import formatDate from "../../../utils/formatTimestamp"
 
 const DashboardGallery = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -69,7 +70,7 @@ const DashboardGallery = () => {
                           />
                         </td>
                         <td>
-                          <p className="text-sm">{item.createdAt}</p>
+                          <p className="text-sm">{formatDate(item.createdAt)}</p>
                         </td>
                         <td className="text-center ">
                           <div className="lg:flex justify-center lg:items-center">

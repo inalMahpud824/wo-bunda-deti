@@ -30,7 +30,6 @@ const FormAddProduct = () => {
     form.append("shortDescription", data.shortDescription)
     form.append("detailDescription", editorRef.current ? editorRef.current.getContent() : "")
     form.append("photo", image.current.files[0])
-    console.log(form)
     try {
       await instance.post("/product", form, {
         headers: {

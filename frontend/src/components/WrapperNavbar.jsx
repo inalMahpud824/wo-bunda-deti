@@ -33,7 +33,7 @@ const WrapperNavbar = ({ children }) => {
             <ul className="menu menu-horizontal ">
               {/* Navbar menu content here */}
               <li><Link to={"/service"}>Daftar Layanan</Link></li>
-              <li><Link to={"/galery"} >Galery</Link></li>
+              <li><Link to={"/gallery"} >Gallery</Link></li>
                 <li><Link to={"/cart"}>Keranjang saya</Link></li>
               {login ? (
                 <li><Link to={"/dashboard"}>Dashboard</Link></li>  
@@ -53,7 +53,7 @@ const WrapperNavbar = ({ children }) => {
         <ul className="menu text-black min-h-full w-80 p-4 bg-primary pt-24 ">
           {/* Sidebar content here */}
           <li><Link to={"/service"}>Daftar Layanan</Link></li>
-          <li><Link to={"/galery"} >Galery</Link></li>
+          <li><Link to={"/gallery"} >Gallery</Link></li>
           <li><Link to={"/cart"}>Keranjang saya</Link></li>
           {login ? (
             <li><Link to={"/dashboard"}>Dashboard</Link></li>

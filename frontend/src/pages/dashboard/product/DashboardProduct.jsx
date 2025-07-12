@@ -21,8 +21,7 @@ const DashboardProduct = () => {
   }, [])
   const handleDelete = async (id) => {
     try {
-      const result = await instance.delete(`/product/${id}`)
-      console.log(result)
+      await instance.delete(`/product/${id}`)
       alert("hapus data sukses")
       fetchData()
       setIdDelete(null)
@@ -48,7 +47,7 @@ const DashboardProduct = () => {
   }
   return (
     <>
-      {isLoading && <Loading /> }
+      {isLoading && <Loading />}
       <WrapperDashboard tabActive={"product"}>
         <ModalSuccess description={"Berhasil mengubah status"} textButton={"Tutup"} title={"Berhasil"} id="success-status" />
         <ModalConfirm description={"apakah anda yankin untuk menghapus Layanan ini?"}
@@ -75,15 +74,13 @@ const DashboardProduct = () => {
                       <tr key={item.id}>
                         <td>{item.id}</td>
                         <td>
-                          <p
-                            // onClick={() => {
-                            //   setIdDetail(item.id);
-                            //   setDetailProductAndService(true);
-                            // }}
+                          <a
+                            href={`/service/${item.id}`}
+                            target="_blank"
                             className="cursor-pointer underline underline-offset-1"
                           >
                             {item.productName}
-                          </p>
+                          </a>
                         </td>
                         <td>
                           <p className="max-h-15 overflow-y-scroll text-xs">{item.shortDescription}</p>

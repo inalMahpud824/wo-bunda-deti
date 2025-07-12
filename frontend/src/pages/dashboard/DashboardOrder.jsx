@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
 import { Loading } from "../../components/loading/Loading"
 import WrapperDashboard from "../../components/WrapperDashboard"
-import { instance } from "../../axios"
+import { baseURL, instance } from "../../axios"
 import { formatPrice } from "../../utils/formatPrice"
 import ModalDetailProductOrder from "../../components/modal/ModalDetailProductOrder"
 import ModalConfirm from "../../components/modal/ModalConfirm"
 import { ModalError } from "../../components/modal/ModalError"
+import formatDate from "../../utils/formatTimestamp"
 
 const DashboardOrder = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -68,12 +69,13 @@ const DashboardOrder = () => {
             {/* head */}
             <thead className="bg-[#EDEDF0] text-black font-semibold">
               <tr className="text-center">
-                <th className="rounded-tr-lg">ID</th>
+                <th className="rounded-tl-lg">ID</th>
                 <th>Nama Cutomer</th>
                 <th>Tanggal Acara</th>
                 <th>Alamat Lengkap</th>
                 <th>Nomer WhatsApp</th>
                 <th>Catatan Tambahan</th>
+                <th>Bukti pembayaran</th>
                 <th>Status</th>
                 <th>Total Harga</th>
                 <th>Tanggal Order</th>
@@ -87,10 +89,6 @@ const DashboardOrder = () => {
                   <td>{item.id}</td>
                   <td>
                     <p
-                      // onClick={() => {
-                      //   setIdDetail(item.id);
-                      //   setDetailProductAndService(true);
-                      // }}
                       className="cursor-pointer underline underline-offset-1"
                     >
                       {item.customerName}
@@ -107,6 +105,9 @@ const DashboardOrder = () => {
                   </td>
                   <td>
                     <p className="">{item.note}</p>
+                  </td>
+                  <td>
+                    <a href={`${baseURL}/uploads/${item.paymentProof}`} target="_blank" className="underline hover:text-blue-600">lihat bukti pembayaran</a>
                   </td>
                   <td>
                     <select
@@ -129,16 +130,16 @@ const DashboardOrder = () => {
                     <p className="">Rp. {formatPrice(item.totalPrice)}</p>
                   </td>
                   <td>
-                    <p className="">{item.orderDate}</p>
+                    <p className="">{formatDate(item.orderDate)}</p>
                   </td>
                   <td>
-                    <p className="">{item.updateAt}</p>
+                    <p className="">{formatDate(item.updateAt)}</p>
                   </td>
                   <td>
                     <div className="flex justify-center items-center gap-2">
-                    <ul>
+                    <ul className="list-disc">
                       {item.itemsOrder.map((itemOrder) => (
-                        <li key={itemOrder.id}>{itemOrder.productName}, </li>
+                        <li key={itemOrder.id}>{itemOrder.productName}</li>
                       ))}
                     </ul>
                     <button type="button" 

@@ -5,6 +5,7 @@ import ProductDetail from "../../pages/ProductDetail"
 import Login from "../../pages/Login"
 import Order from "../../pages/Oder"
 import Cart from "../../pages/Cart"
+import Gallery from "../../pages/Gallery"
 
 export const PublicRoutes = () => {
   return (
@@ -15,6 +16,7 @@ export const PublicRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/service/:id/order" element={<Order />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/gallery" element={<Gallery />} />
     </Routes>
   )
 }
