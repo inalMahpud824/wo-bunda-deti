@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import useTokenValidation from "../hooks/useTokenValidation";
+import logoPkk from "../assets/img/logo_pkk.png"
+import logoGov from "../assets/img/logo_kab_bandung_barat.png"
 
 // import logo from "../assets/img/logo.png"
 const WrapperNavbar = ({ children }) => {
@@ -11,37 +13,40 @@ const WrapperNavbar = ({ children }) => {
         {/* Navbar */}
         <div className="bg-[#fef9f5] w-full text-black z-10 md:px-25 sticky top-0">
           <div className="container mx-auto navbar flex justify-between">
-          <Link to={"/"} className="mx-2 lg:flex-1 px-2 text-4xl font-logo">Bunda Deti</Link>
-          <div className="lg:hidden">
-            <label htmlFor="my-drawer-3" aria-label="open sidebar" className="btn btn-square btn-ghost">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                className="inline-block h-6 w-6 stroke-current"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16M4 18h16"
-                ></path>
-              </svg>
-            </label>
-          </div>
-          <div className="hidden flex-none lg:block">
-            <ul className="menu menu-horizontal ">
-              {/* Navbar menu content here */}
-              <li><Link to={"/service"}>Daftar Layanan</Link></li>
-              <li><Link to={"/gallery"} >Gallery</Link></li>
+            <Link to={"/"} className="flex justify-center items-center gap-2">
+              <img src={logoGov} alt="logo" width={50} />
+              <img src={logoPkk} alt="logo pkk" width={50} />
+            </Link>
+            <div className="lg:hidden">
+              <label htmlFor="my-drawer-3" aria-label="open sidebar" className="btn btn-square btn-ghost">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  className="inline-block h-6 w-6 stroke-current"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  ></path>
+                </svg>
+              </label>
+            </div>
+            <div className="hidden flex-none lg:block">
+              <ul className="menu menu-horizontal ">
+                {/* Navbar menu content here */}
+                <li><Link to={"/service"}>Daftar Layanan</Link></li>
+                <li><Link to={"/gallery"} >Gallery</Link></li>
                 <li><Link to={"/cart"}>Keranjang saya</Link></li>
-              {login ? (
-                <li><Link to={"/dashboard"}>Dashboard</Link></li>  
-              ) : (
-              <li><Link to={"/login"}>Login Admin</Link></li>
-              )}
-            </ul>
-          </div>
+                {login ? (
+                  <li><Link to={"/dashboard"}>Dashboard</Link></li>
+                ) : (
+                  <li><Link to={"/login"}>Login Admin</Link></li>
+                )}
+              </ul>
+            </div>
 
           </div>
         </div>

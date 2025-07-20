@@ -8,10 +8,12 @@ import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import ContactWA from "../components/ContactWA";
 import HeroSection2 from "../components/HeroSection2";
+import { useContact } from "../store/contactStore";
 
 const LandingPage = () => {
   const [product, setProduct] = useState([]);
   const [gallery, setGallery] = useState([])
+  const { phoneNumber } = useContact()
   useEffect(() => {
     async function fetchData() {
       const [productRes, gallerRes] = await Promise.all([
@@ -36,7 +38,7 @@ const LandingPage = () => {
                 pernikahan, Anda dapat menikah dengan biaya yang terjangkau
               </h3>
               <p className="lato-regular text-sm lg:text-base text-gray-500 text-center">
-                Perkenalkan kami Bunda Deti service salah satu penyedia jasa
+                Perkenalkan kami PKK Desa Ciwaruga salah satu penyedia jasa
                 pernikahan yang menjadi tempat dimana segala kebutuhan pernikahan
                 calon perngantin tersedia disini. Dari mulai Tim Wedding organizer
                 Bandung yang profesional dan komunikatif, menu catering yang lezat
@@ -99,9 +101,9 @@ const LandingPage = () => {
             </div>
           </section>
           <div className="w-full flex justify-center items-center pt-8 pb-4">
-            <button className="btn btn-secondary text-white rounded-2xl text-xl">
+            <Link to={"/gallery"} className="btn btn-secondary text-white rounded-2xl text-xl">
               Lihat Selengkapnya
-            </button>
+            </Link>
           </div>
           <section className="py-12 bg-accent text-center text-secondary rounded-2xl shadow-sm">
             <h2 className="text-3xl font-bold">
@@ -110,9 +112,11 @@ const LandingPage = () => {
             <p className="text-lg mt-2">
               Hubungi kami sekarang untuk konsultasi gratis!
             </p>
-            <button className="btn btn-secondary mt-5 text-white">
+            <a
+              href={`https://wa.me/${phoneNumber}`}
+              target="_blank" className="btn btn-secondary mt-5 text-white">
               Hubungi Kami
-            </button>
+            </a>
           </section>
         </div>
       </div>

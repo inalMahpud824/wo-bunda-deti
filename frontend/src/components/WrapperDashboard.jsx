@@ -1,3 +1,5 @@
+import logoPkk from "../assets/img/logo_pkk.png"
+import logoGov from "../assets/img/logo_kab_bandung_barat.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBuildingUser,
@@ -17,7 +19,10 @@ const WrapperDashboard = ({ children, tabActive, }) => {
       {/* Sidebar */}
       <div className="min-w-[17rem] min-h-screen md:block text-gray-700 border bg-primary overflow-y-auto hidden">
         <div className=" text-center py-1">
-          <Link to={"/"} className="mx-2 lg:flex-1 px-2 text-4xl font-logo">Bunda Deti</Link>
+          <Link to={"/"} className="flex justify-center items-center gap-2">
+          <img src={logoGov} alt="logo" width={70} />
+          <img src={logoPkk} alt="logo" width={70} />
+          </Link>
         </div>
         <div className="text-lg">
           <h2 className="text-xl font-bold pt-4 pl-3">Home</h2>

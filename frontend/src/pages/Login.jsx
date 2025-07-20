@@ -6,6 +6,8 @@ import { instance } from "../axios";
 import useTokenValidation from "../hooks/useTokenValidation";
 import { ModalError } from "../components/modal/ModalError";
 import { Loading } from "../components/loading/Loading";
+import logoPkk from "../assets/img/logo_pkk.png"
+import logoGov from "../assets/img/logo_kab_bandung_barat.png"
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -59,7 +61,10 @@ const Login = () => {
           onSubmit={handleSubmit}
           className="md:w-[37rem] h-screen md:h-fit w-full py-4 px-10 shadow-lg flex flex-col justify-center text-gray-700"
         >
-          <Link to={"/"} className="text-center text-4xl font-logo ">Bunda Deti</Link>
+          <Link to={"/"} className="flex justify-center items-center gap-2 ">
+          <img src={logoGov} alt="logo" width={70} />
+          <img src={logoPkk} alt="logo" width={70} />
+          </Link>
           <h1 className="text-center text-gray-700 text-xl font-bold">Masuk</h1>
           <label htmlFor="email" className="py-2 font-semibold">
             username
