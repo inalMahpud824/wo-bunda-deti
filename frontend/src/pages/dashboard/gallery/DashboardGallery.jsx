@@ -74,12 +74,6 @@ const DashboardGallery = () => {
                         </td>
                         <td className="text-center ">
                           <div className="lg:flex justify-center lg:items-center">
-                            <Link
-                              className="btn btn-secondary text-white hover:bg-gray-400 border-none my-1 lg:my-0 mx-3 btn-sm"
-                              to={`form/${item.id}`}
-                            >
-                              Ubah
-                            </Link>
                             <button
                               className="btn btn-error text-white btn-sm"
                               onClick={() => {

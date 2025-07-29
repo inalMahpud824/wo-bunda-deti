@@ -92,7 +92,7 @@ public class OrderService {
             totalPrice = totalPrice.add(prod.getPrice());
             OrderItem item = new OrderItem();
             item.setPriceAtOrderTime(prod.getPrice());
-            item.setProduct(prod);
+            item.setProductName(prod.getName());
             item.setOrder(order);
             orderItems.add(item);
         }
@@ -204,9 +204,8 @@ public class OrderService {
 
     private ItemOrderResponse buildItemOrderResponse(OrderItem orderItem){
         ItemOrderResponse res = new ItemOrderResponse();
-        res.setIdProduct(orderItem.getProduct().getId());
         res.setPriceAtOrder(orderItem.getPriceAtOrderTime());
-        res.setProductName(orderItem.getProduct().getName());
+        res.setProductName(orderItem.getProductName());
         return res;
     }
 

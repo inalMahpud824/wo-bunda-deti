@@ -3,6 +3,7 @@ import Footer from "../components/Footer"
 import WrapperNavbar from "../components/WrapperNavbar"
 import { baseURL, instance } from "../axios";
 import { Loading } from "../components/loading/Loading";
+import ContactWA from "../components/ContactWA";
 
 const Gallery = () => {
   const [gallery, setGallery] = useState([])
@@ -36,6 +37,7 @@ const Gallery = () => {
           </div>
 
         </div>
+        <ContactWA />
         <Footer />
       </WrapperNavbar>
     </>

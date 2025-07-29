@@ -88,9 +88,7 @@ const DashboardOrder = () => {
                 <tr key={item.id}>
                   <td>{item.id}</td>
                   <td>
-                    <p
-                      className="cursor-pointer underline underline-offset-1"
-                    >
+                    <p>
                       {item.customerName}
                     </p>
                   </td>

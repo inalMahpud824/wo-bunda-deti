@@ -2,10 +2,9 @@ import { formatPrice } from "../../utils/formatPrice"
 
 const ModalDetailProductOrder = ({
   itemsOrder = [],
-  funtionOnConfirm,
   id = "info",
-  buttonText = 'Ya',
 }) => {
+  console.log(itemsOrder)
   return (
     <>
       {/* Open the modal using document.getElementById('ID').showModal() method */}
@@ -16,7 +15,6 @@ const ModalDetailProductOrder = ({
               {/* head */}
               <thead className="bg-[#EDEDF0] text-black font-semibold text-base ">
                 <tr className="text-center">
-                  <th>ID Layanan</th>
                   <th>Nama Layanan</th>
                   <th>Harga saat dipesan</th>
                 </tr>
@@ -24,13 +22,8 @@ const ModalDetailProductOrder = ({
               <tbody className="text-center text-black">
                 {itemsOrder?.map((item) => (
                   <tr key={item.idProduct}>
-                    <td>{item.idProduct}</td>
                       <td>
                         <p
-                          // onClick={() => {
-                          //   setIdDetail(item.id);
-                          //   setDetailProductAndService(true);
-                          // }}
                           className="cursor-pointer underline underline-offset-1"
                         >
                           {item.productName}
@@ -39,7 +32,6 @@ const ModalDetailProductOrder = ({
                       <td>
                       <p className="text-xs">Rp. {formatPrice(item.priceAtOrder)}</p>
                       </td>
-                  
                     </tr>
                   ))}
               </tbody>

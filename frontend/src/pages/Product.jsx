@@ -3,6 +3,7 @@ import WrapperNavbar from "../components/WrapperNavbar"
 import { instance } from "../axios"
 import Card from "../components/Card"
 import Footer from "../components/Footer"
+import ContactWA from "../components/ContactWA"
 
 const Product = () => {
    const [product, setProduct] = useState([])
@@ -33,6 +34,7 @@ const Product = () => {
         )}
       </div>
       </div>
+      <ContactWA />
       <Footer />
     </WrapperNavbar>
   )
