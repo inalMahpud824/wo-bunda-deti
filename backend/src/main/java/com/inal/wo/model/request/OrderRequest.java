@@ -1,6 +1,7 @@
 package com.inal.wo.model.request;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class OrderRequest {
   
     @NotNull
-    private LocalDate eventDate;
+    private LocalDateTime eventDate;
 
     @NotBlank
     private String customerName;

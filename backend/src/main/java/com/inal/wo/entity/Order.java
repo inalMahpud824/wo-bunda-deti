@@ -34,7 +34,7 @@ public class Order {
     private LocalDateTime orderDate;
 
     @Column(name = "event_date", nullable = false)
-    private LocalDate eventDate;
+    private LocalDateTime eventDate;
 
     @Column(name = "customer_name", nullable = false)
     private String customerName;

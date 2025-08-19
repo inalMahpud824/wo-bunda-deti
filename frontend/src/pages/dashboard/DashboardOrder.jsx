@@ -93,7 +93,7 @@ const DashboardOrder = () => {
                     </p>
                   </td>
                   <td>
-                    <p className="">{item.eventDate}</p>
+                    <p className="">{formatDate(item.eventDate)}</p>
                   </td>
                   <td>
                     <p className="max-h-15 overflow-y-scroll">{item.address}</p>

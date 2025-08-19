@@ -163,7 +163,7 @@ const handleSubmit = async (e) => {
             <input
               id="eventDate"
               name="eventDate"
-              type="date"
+              type="datetime-local"
               className="input w-full bg-gray-100 my-4"
               required
               onChange={handelChange}

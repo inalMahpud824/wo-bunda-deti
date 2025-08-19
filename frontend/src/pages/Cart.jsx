@@ -142,7 +142,7 @@ const Cart = () => {
 
             <div className="bg-white rounded-2xl shadow-md p-5 my-7">
               <h2 className="text-xl font-semibold py-1">Cara pembayaran</h2>
-              <p>Sebelum mengisi form pastikan nama layanan yang dipesan sesuai.</p>
+              <p>Sebelum mengisi form pastikan nama layanan yang dipesan sesuai. Selain itu minimal tanggal acara <strong> H +3 yaitu 3 hari setelah hari</strong></p>
               <p>
                 Silahkan kirim sejumlah uang yang sesuai dengan harga layanan ke
                 rekening berikut
@@ -193,7 +193,7 @@ const Cart = () => {
               <input
                 id="eventDate"
                 name="eventDate"
-                type="date"
+                type="datetime-local"
                 className="input w-full bg-gray-100 my-4"
                 required
                 onChange={handelChange}

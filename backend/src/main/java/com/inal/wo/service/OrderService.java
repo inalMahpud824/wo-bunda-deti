@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Clock;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +52,29 @@ public class OrderService {
         OrderStatus status = orderStatusRepository.findById(request.getOrderStatusId()).orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Status Order tidak ditemukan"));
 
-        // Buat folder jika belum ada
+        LocalDate today = LocalDate.now(clock);  
+        LocalDate eventDate = request.getEventDate().toLocalDate();
+        
+        // Cek kalau eventDate <= hari ini
+        if (!eventDate.isAfter(today.plusDays(2))) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Tanggal acara minimal 2 hari setelah hari ini");
+        }
+        
+        Order order = new Order();
+        order.setAddress(request.getAddress());
+        order.setCustomerName(request.getCustomerName());
+        order.setEventDate(request.getEventDate());
+        if (request.getNote() != null) {
+            order.setNote(request.getNote());
+        }
+        order.setOrderDate(LocalDateTime.now(clock));
+        order.setUpdateAt(LocalDateTime.now(clock));
+        order.setPhoneNumber(request.getPhoneNumber());
+        order.setStatus(status);
+        
+            // Buat folder jika belum ada
         File dir = new File(UPLOAD_DIR);
         if(!dir.exists()) dir.mkdirs();
 
@@ -70,17 +93,6 @@ public class OrderService {
             );
         }
         
-        Order order = new Order();
-        order.setAddress(request.getAddress());
-        order.setCustomerName(request.getCustomerName());
-        order.setEventDate(request.getEventDate());
-        if (request.getNote() != null) {
-            order.setNote(request.getNote());
-        }
-        order.setOrderDate(LocalDateTime.now(clock));
-        order.setUpdateAt(LocalDateTime.now(clock));
-        order.setPhoneNumber(request.getPhoneNumber());
-        order.setStatus(status);
 
         // simpan gambar bukti pembayaran
         saveFile(request, order);
