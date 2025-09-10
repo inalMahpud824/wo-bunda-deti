@@ -20,7 +20,7 @@ const Product = () => {
       <div className="container mx-auto">
       <h2 className="text-center pb-7 text-4xl head-font">Layanan Kami</h2>
       
-      <div className="flex justify-around items-center md:flex-row flex-col gap-5 md:px-25">
+      <div className="flex justify-center items-center gap-5 flex-wrap">
         {product && product.length > 0 ? (
           product.map((item, idx) => (
             <Card key={item.id || idx}

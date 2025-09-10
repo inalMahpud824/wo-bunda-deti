@@ -7,6 +7,17 @@
   --color-accent: #FFF3EF;
 }
 
+/* Sembunyikan scrollbar tapi masih bisa scroll */
+::-webkit-scrollbar {
+  display: none;
+}
+
+html, body {
+  -ms-overflow-style: none;  /* IE dan Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+
 .font-logo {
   font-family: "Cinzel Decorative", serif;
   font-style: italic;
