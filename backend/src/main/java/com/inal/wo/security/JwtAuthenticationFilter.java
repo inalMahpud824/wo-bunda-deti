@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import com.inal.wo.entity.User;
@@ -54,9 +55,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String token = authHeader.substring(7);
-        String username = null;
+        String email = null;
         try {
-            username = jwtUtil.extractUsername(token);
+            email = jwtUtil.extractEmail(token);
         } catch (ExpiredJwtException e) {
             // Token kadaluarsa, kirim respon 401 dan hentikan filter
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token expired");
@@ -67,11 +68,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
     }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            User user = userRepository.findByUsername(username).orElse(null);
+        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            User user = userRepository.findByEmail(email).orElse(null);
             if (user != null) {
                 UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+                        new UsernamePasswordAuthenticationToken(user, null, List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole())));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }

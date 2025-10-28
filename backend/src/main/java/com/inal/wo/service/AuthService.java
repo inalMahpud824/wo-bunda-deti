@@ -22,13 +22,13 @@ public class AuthService {
     public LoginResponse login(LoginRequest request) {
       log.info("Request login with username {} and password {}", 
           request.getUsername(), request.getPassword());
-        User user = userRepository.findByUsername(request.getUsername()).orElseThrow(
-          () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "username not found"));
+        User user = userRepository.findByEmail(request.getUsername()).orElseThrow(
+          () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "email not found"));
 
       if(!user.getPassword().equals(request.getPassword())) {
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "password wrong");
       }
-      String token = jwtUtil.generateToken(request.getUsername());
+      String token = jwtUtil.generateToken(user);
 
       LoginResponse response = new LoginResponse();
       response.setMessage("Login Success");
