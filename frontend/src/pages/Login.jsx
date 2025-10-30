@@ -66,12 +66,12 @@ const Login = () => {
           <img src={logoPkk} alt="logo" width={70} />
           </Link>
           <h1 className="text-center text-gray-700 text-xl font-bold">Masuk</h1>
-          <label htmlFor="email" className="py-2 font-semibold">
-            username
+          <label htmlFor="username" className="py-2 font-semibold">
+            Email
           </label>
           <input
             type="text"
-            placeholder="Masukan username"
+            placeholder="Masukan email"
             name="username"
             onChange={handelChange}
             className="w-full border px-4 py-2 outline-none bg-white rounded-full focus-within:border-black"
@@ -91,6 +91,7 @@ const Login = () => {
           >
             Login
           </button>
+          <p className="pt-1 text-center text-sm font-light">Belum punya akun? <Link to={"/register"} className="text-secondary hover:font-bold">Daftar</Link></p>
         </form>
       </section>
     </>

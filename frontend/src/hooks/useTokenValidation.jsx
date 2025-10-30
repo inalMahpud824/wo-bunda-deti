@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useUser } from "../store/userStore";
 import { jwtDecode } from "jwt-decode";
 
-const useTokenValidation = () => {
-  const { login, setLogin, setRole, setUserId } = useUser();
+const useTokenValidation = () => {``
+  const { login, userId, setLogin, setRole, setUserId, } = useUser();
   const [validating, setValidating] = useState(true);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const useTokenValidation = () => {
       } else {
         setLogin(true);
         setRole(tokenDecode.role);
-        setUserId(tokenDecode.id);
+        setUserId(tokenDecode.userId);
       }
     } catch {
       console.error("Token decoding failed");
@@ -27,7 +27,7 @@ const useTokenValidation = () => {
     }
   }, [setLogin, setRole, setUserId]);
 
-  return { login, validating };
+  return { login, validating, userId };
 };
 
 export default useTokenValidation

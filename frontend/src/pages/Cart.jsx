@@ -10,6 +10,7 @@ import ContactWA from "../components/ContactWA"
 import { useContact } from "../store/contactStore"
 import { ModalError } from "../components/modal/ModalError"
 import { ModalSuccess } from "../components/modal/ModalSuccess"
+import useTokenValidation from "../hooks/useTokenValidation"
 
 const Cart = () => {
   const [products, setProducts] = useState([])
@@ -18,6 +19,7 @@ const Cart = () => {
   const image = useRef()
   const [error, setError] = useState(null)
   const [orderStatus, setOrderStatus] = useState([])
+  const { login, userId } = useTokenValidation()
   const {
     phoneNumber,
     bankName,
@@ -25,19 +27,22 @@ const Cart = () => {
     ownerAccountName } = useContact()
   useEffect(() => {
     setIsLoading(true)
+    if(!login) {
+      window.location.href = "/login";
+      setIsLoading(false);
+      return;
+    }
     async function fetch() {
       try {
-        const idProduct = JSON.parse(localStorage.getItem('cart')) || [];
 
         const [productRes, orderStatus] = await Promise.all([
-          Promise.all(idProduct.map((id) => instance.get(`/public/product/${id}`))),
+          instance.get(`/cart/${userId}`),
           instance.get(`/public/order-status`)
         ]
         );
 
-        const productData = productRes.map((res) => res.data);
         setOrderStatus(orderStatus.data)
-        setProducts(productData);
+        setProducts(productRes.data);
         setIsLoading(false)
       } catch (e) {
         console.error(e)
@@ -45,14 +50,19 @@ const Cart = () => {
       }
     }
     fetch()
-  }, [])
+  }, [login, userId])
 
-  const handleRemoveFromCart = (idToRemove) => {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-    // Hapus id dari localStorage
-    const updatedCart = cart.filter((id) => id !== idToRemove);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
+  const handleRemoveFromCart = async (idToRemove) => {
+    setIsLoading(true);
+    try {
+      await instance.delete(`/cart/${idToRemove}`)
+      alert("Produk berhasil dihapus dari keranjang!");
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      alert("Terjadi kesalahan saat menghapus produk dari keranjang.");
+      setIsLoading(false);
+    }
 
     // Hapus produk dari state
     setProducts((prevProducts) => prevProducts.filter((product) => product.id !== idToRemove));

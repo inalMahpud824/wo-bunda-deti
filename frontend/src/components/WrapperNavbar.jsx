@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import useTokenValidation from "../hooks/useTokenValidation";
-import logoPkk from "../assets/img/logo_pkk.png"
-import logoGov from "../assets/img/logo_kab_bandung_barat.png"
+import logoPkk from "../assets/img/logo_pkk.png";
+import logoGov from "../assets/img/logo_kab_bandung_barat.png";
 
 // import logo from "../assets/img/logo.png"
 const WrapperNavbar = ({ children }) => {
-  const { login } = useTokenValidation()
+  const { login } = useTokenValidation();
   return (
     <div className="drawer drawer-end">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
@@ -47,13 +47,16 @@ const WrapperNavbar = ({ children }) => {
                 <li>
                   <Link to={"/gallery"}>Gallery</Link>
                 </li>
-                <li>
-                  <Link to={"/cart"}>Keranjang saya</Link>
-                </li>
+
                 {login ? (
-                  <li>
-                    <Link to={"/dashboard"}>Dashboard</Link>
-                  </li>
+                  <>
+                    <li>
+                      <Link to={"/cart"}>Keranjang saya</Link>
+                    </li>
+                    <li>
+                      <Link to={"/dashboard"}>Dashboard</Link>
+                    </li>
+                  </>
                 ) : (
                   <>
                     <li>
@@ -86,13 +89,15 @@ const WrapperNavbar = ({ children }) => {
           <li>
             <Link to={"/gallery"}>Gallery</Link>
           </li>
-          <li>
-            <Link to={"/cart"}>Keranjang saya</Link>
-          </li>
           {login ? (
-            <li>
-              <Link to={"/dashboard"}>Dashboard</Link>
-            </li>
+            <>
+              <li>
+                <Link to={"/cart"}>Keranjang saya</Link>
+              </li>
+              <li>
+                <Link to={"/dashboard"}>Dashboard</Link>
+              </li>
+            </>
           ) : (
             <>
               <li>
@@ -107,6 +112,6 @@ const WrapperNavbar = ({ children }) => {
       </div>
     </div>
   );
-}
+};
 
 export default WrapperNavbar;

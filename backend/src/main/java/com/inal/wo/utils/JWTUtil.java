@@ -18,6 +18,7 @@ public class JWTUtil {
     public String generateToken(User user) {
       return Jwts.builder()
             .subject(user.getId().toString())
+            .claim("userId", user.getId())
             .claim("role", user.getRole())
             .claim("email", user.getEmail())
             .issuedAt(new Date())

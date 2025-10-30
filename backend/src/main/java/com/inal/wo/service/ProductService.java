@@ -181,7 +181,7 @@ public class ProductService {
         }
     }
 
-    private ProductResponse buildProductRes(Product product) {
+    public ProductResponse buildProductRes(Product product) {
         ProductResponse res = new ProductResponse();
         res.setActiveStatus(product.getActiveStatus());
         res.setId(product.getId());
