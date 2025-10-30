@@ -18,7 +18,11 @@ const WrapperNavbar = ({ children }) => {
               <img src={logoPkk} alt="logo pkk" width={50} />
             </Link>
             <div className="lg:hidden">
-              <label htmlFor="my-drawer-3" aria-label="open sidebar" className="btn btn-square btn-ghost">
+              <label
+                htmlFor="my-drawer-3"
+                aria-label="open sidebar"
+                className="btn btn-square btn-ghost"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -37,38 +41,72 @@ const WrapperNavbar = ({ children }) => {
             <div className="hidden flex-none lg:block">
               <ul className="menu menu-horizontal ">
                 {/* Navbar menu content here */}
-                <li><Link to={"/service"}>Daftar Layanan</Link></li>
-                <li><Link to={"/gallery"} >Gallery</Link></li>
-                <li><Link to={"/cart"}>Keranjang saya</Link></li>
+                <li>
+                  <Link to={"/service"}>Daftar Layanan</Link>
+                </li>
+                <li>
+                  <Link to={"/gallery"}>Gallery</Link>
+                </li>
+                <li>
+                  <Link to={"/cart"}>Keranjang saya</Link>
+                </li>
                 {login ? (
-                  <li><Link to={"/dashboard"}>Dashboard</Link></li>
+                  <li>
+                    <Link to={"/dashboard"}>Dashboard</Link>
+                  </li>
                 ) : (
-                  <li><Link to={"/login"}>Login Admin</Link></li>
+                  <>
+                    <li>
+                      <Link to={"/login"}>Login</Link>
+                    </li>
+
+                    <li>
+                      <Link to={"/register"}>Register</Link>
+                    </li>
+                  </>
                 )}
               </ul>
             </div>
-
           </div>
         </div>
         {/* Page content here */}
         {children}
       </div>
       <div className="drawer-side ">
-        <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
+        <label
+          htmlFor="my-drawer-3"
+          aria-label="close sidebar"
+          className="drawer-overlay"
+        ></label>
         <ul className="menu text-black min-h-full w-80 p-4 bg-primary pt-24 ">
           {/* Sidebar content here */}
-          <li><Link to={"/service"}>Daftar Layanan</Link></li>
-          <li><Link to={"/gallery"} >Gallery</Link></li>
-          <li><Link to={"/cart"}>Keranjang saya</Link></li>
+          <li>
+            <Link to={"/service"}>Daftar Layanan</Link>
+          </li>
+          <li>
+            <Link to={"/gallery"}>Gallery</Link>
+          </li>
+          <li>
+            <Link to={"/cart"}>Keranjang saya</Link>
+          </li>
           {login ? (
-            <li><Link to={"/dashboard"}>Dashboard</Link></li>
+            <li>
+              <Link to={"/dashboard"}>Dashboard</Link>
+            </li>
           ) : (
-            <li><Link to={"/login"}>Login Admin</Link></li>
+            <>
+              <li>
+                <Link to={"/login"}>Login</Link>
+              </li>
+              <li>
+                <Link to={"/register"}>Register</Link>
+              </li>
+            </>
           )}
         </ul>
       </div>
     </div>
-  )
+  );
 }
 
 export default WrapperNavbar;

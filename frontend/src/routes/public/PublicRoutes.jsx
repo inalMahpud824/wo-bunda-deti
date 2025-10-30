@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom"
 import { lazy, Suspense } from "react"
 import { Loading } from "../../components/loading/Loading"
+import Register from "../../pages/Register"
 
 const LandingPage = lazy(() => import("../../pages/LandingPage"))
 const Gallery = lazy(() => import("../../pages/Gallery"))
@@ -21,6 +22,7 @@ export const PublicRoutes = () => {
         <Route path="/service/:id/order" element={<Order />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </Suspense>
   )

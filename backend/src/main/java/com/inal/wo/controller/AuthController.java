@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.inal.wo.model.request.LoginRequest;
+import com.inal.wo.model.request.RegisterRequest;
+import com.inal.wo.model.response.GeneralResponse;
 import com.inal.wo.model.response.LoginResponse;
 import com.inal.wo.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -22,5 +24,11 @@ public class AuthController {
 
         return ResponseEntity.ok(authService.login(request));
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<GeneralResponse<String>> register(@RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(authService.register(request));
+    }
+    
 
 }

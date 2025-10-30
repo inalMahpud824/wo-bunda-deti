@@ -77,7 +77,7 @@ const PrivateRoute = () => {
       </Suspense>
     );
   }
-  return <h1>hello word</h1>;
+  // return <h1>hello word</h1>;
 };
 
 export default PrivateRoute;
