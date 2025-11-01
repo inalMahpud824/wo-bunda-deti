@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { Loading } from "../components/loading/Loading"
 import WrapperNavbar from "../components/WrapperNavbar"
-import { baseURL, instance } from "../axios"
+import { instance } from "../axios"
 import { formatPrice } from "../utils/formatPrice"
 import Footer from "../components/Footer"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -86,25 +86,22 @@ const Cart = () => {
     const form = new FormData()
     const status = orderStatus.find(item => item.statusName == "MENUNGGU")
     form.append("eventDate", dataOrder.eventDate)
-    form.append("customerName", dataOrder.customerName)
-    form.append("phoneNumber", dataOrder.phoneNumber)
-    form.append("address", dataOrder.address)
     form.append("orderStatusId", status.id)
+    form.append("userId", userId)
     if (dataOrder.note) {
       form.append("note", dataOrder.note)
     }
     products.forEach((item) => {
-      form.append("productId", item.id)
+      form.append("productId", item.productId)
     })
     form.append("paymentProof", image.current.files[0])
     try {
-      await instance.post("/public/order", form, {
+      await instance.post("/order", form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
       document.getElementById("modal-success").showModal()
-      localStorage.removeItem("cart");
       setProducts([])
       setIsLoading(false)
     } catch (e) {
@@ -119,41 +116,58 @@ const Cart = () => {
   }
   return (
     <>
-      {isLoading && <Loading />}
       <WrapperNavbar>
+      {isLoading && <Loading />}
         <ModalError error={error} setError={setError} />
-        <ModalSuccess description={`Berhasil melakukan pemesanan, Jangan lupa untuk konfirmasi ke nomer WhatsApp admin ${phoneNumber} atau bisa klik icon whatsApp di pojok kanan bawah`} 
-          title={"Berhasil"} textButton={"Tutup"} id="modal-success" />
+        <ModalSuccess
+          description={`Berhasil melakukan pemesanan, Jangan lupa untuk konfirmasi ke nomer WhatsApp admin ${phoneNumber} atau bisa klik icon whatsApp di pojok kanan bawah`}
+          title={"Berhasil"}
+          textButton={"Tutup"}
+          id="modal-success"
+        />
         <div className="container mx-auto">
-
           <div className="w-full px-7 py-7 bg-[#fef9f5] text-black md:px-24">
             <h2 className="font-bold text-xl py-6">Layanan yang di pesan</h2>
             <div className="flex flex-col gap-4">
-              {products.length > 0 ? products.map((item) => (
-                <div className="flex items-center justify-between gap-4" key={item.id}>
-                  <div className="flex items-center gap-4 bg-white rounded-2xl shadow-md p-5 w-full" >
-                    <img
-                      src={`${baseURL}/uploads/${item.photo}`}
-                      alt=""
-                      width={70}
-                      className="rounded-xl"
-                    />
-                    <div className="">
-                      <p>Nama : {item.productName}</p>
-                      <p>Harga : Rp. {formatPrice(item.price)}</p>
+              {products.length > 0
+                ? products.map((item) => (
+                    <div
+                      className="flex items-center justify-between gap-4"
+                      key={item.id}
+                    >
+                      <div className="flex items-center gap-4 bg-white rounded-2xl shadow-md p-5 w-full">
+                        <img
+                          src={`${item.photo}`}
+                          alt=""
+                          width={70}
+                          className="rounded-xl"
+                        />
+                        <div className="">
+                          <p>Nama : {item.productName}</p>
+                          <p>Harga : Rp. {formatPrice(item.price)}</p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveFromCart(item.id)}
+                        className="hover:cursor-pointer"
+                      >
+                        <FontAwesomeIcon
+                          icon={faTrash}
+                          className="text-2xl text-red-500 hover:text-red-700"
+                        />
+                      </button>
                     </div>
-                  </div>
-                  <button type="button" onClick={() => handleRemoveFromCart(item.id)} className="hover:cursor-pointer">
-                    <FontAwesomeIcon icon={faTrash} className="text-2xl text-red-500 hover:text-red-700" />
-                  </button>
-                </div>
-              )) : ""}
+                  ))
+                : ""}
             </div>
 
             <div className="bg-white rounded-2xl shadow-md p-5 my-7">
               <h2 className="text-xl font-semibold py-1">Cara pembayaran</h2>
-              <p>Sebelum mengisi form pastikan nama layanan yang dipesan sesuai. Selain itu minimal tanggal acara <strong> H +3 yaitu 3 hari setelah hari</strong></p>
               <p>
+                Sebelum mengisi form pastikan data pada profile dan nama layanan
+                yang dipesan sesuai. Selain itu minimal tanggal acara{" "}
+                <strong> H +3 yaitu 3 hari setelah hari </strong>
                 Silahkan kirim sejumlah uang yang sesuai dengan harga layanan ke
                 rekening berikut
               </p>
@@ -162,12 +176,15 @@ const Cart = () => {
                 <li>Nomor Rekening: {accountNumber}</li>
                 <li>Nama: {ownerAccountName}</li>
               </ul>
-              <h2 className="text-xl font-semibold py-1">Konfirmasi Pembayaran</h2>
+              <h2 className="text-xl font-semibold py-1">
+                Konfirmasi Pembayaran
+              </h2>
               <p>
                 Setelah melakukan pembayaran dan mengisi formulir, silahkan
-                konfirmasi ke nomor WhatsApp berikut: <strong>{phoneNumber}</strong>{" "}
-                atau bisa juga konfirmasi ke icon whatsApp yang mengambang di
-                website pojok kanan bawah. Pesanan anda akan diproses lebih lanjut
+                konfirmasi ke nomor WhatsApp berikut:{" "}
+                <strong>{phoneNumber}</strong> atau bisa juga konfirmasi ke icon
+                whatsApp yang mengambang di website pojok kanan bawah. Pesanan
+                anda akan diproses lebih lanjut
               </p>
             </div>
 
@@ -179,23 +196,9 @@ const Cart = () => {
               <h2 className="text-center font-bold text-lg capitalize">
                 Isi data diri
               </h2>
-              <label htmlFor="customerName" className="font-semibold">
-                Nama Pemesan <FontAwesomeIcon
-                  icon={faStarOfLife}
-                  className="text-red-500 text-[5px] pb-2"
-                />
-              </label>
-              <input
-                id="customerName"
-                name="customerName"
-                type="text"
-                placeholder="masukan nama pemesan"
-                className="input w-full bg-gray-100 my-4"
-                required
-                onChange={handelChange}
-              />
               <label htmlFor="eventDate" className="font-semibold">
-                Tanggal acara <FontAwesomeIcon
+                Tanggal acara{" "}
+                <FontAwesomeIcon
                   icon={faStarOfLife}
                   className="text-red-500 text-[5px] pb-2"
                 />
@@ -204,36 +207,6 @@ const Cart = () => {
                 id="eventDate"
                 name="eventDate"
                 type="datetime-local"
-                className="input w-full bg-gray-100 my-4"
-                required
-                onChange={handelChange}
-              />
-              <label htmlFor="phoneNumber" className="font-semibold">
-                No WhatsApp <FontAwesomeIcon
-                  icon={faStarOfLife}
-                  className="text-red-500 text-[5px] pb-2"
-                />
-              </label>
-              <input
-                id="phoneNumber"
-                name="phoneNumber"
-                type="text"
-                placeholder="Contoh: 08837123"
-                className="input w-full bg-gray-100 my-4"
-                required
-                onChange={handelChange}
-              />
-              <label htmlFor="address" className="font-semibold">
-                Alamat lengkap <FontAwesomeIcon
-                  icon={faStarOfLife}
-                  className="text-red-500 text-[5px] pb-2"
-                />
-              </label>
-              <input
-                id="address"
-                name="address"
-                type="text"
-                placeholder="contoh: jl soekarno hatta rt/rw desa kecamatan kabupaten"
                 className="input w-full bg-gray-100 my-4"
                 required
                 onChange={handelChange}
@@ -251,7 +224,8 @@ const Cart = () => {
               />
               <label htmlFor="paymentProof" className="label">
                 <span className="label text-black font-semibold">
-                  Bukti Pembayaran <FontAwesomeIcon
+                  Bukti Pembayaran{" "}
+                  <FontAwesomeIcon
                     icon={faStarOfLife}
                     className="text-red-500 text-[5px] pb-2"
                   />
@@ -262,7 +236,9 @@ const Cart = () => {
                   icon={faCloudArrowUp}
                   className="text-[2.5rem] text-secondary"
                 />
-                <p className="font-semibold text-black pb-2">Pilih file disini</p>
+                <p className="font-semibold text-black pb-2">
+                  Pilih file disini
+                </p>
                 <p className="fontlight text-sm text-gray-400">
                   Format JPEG, PNG, dan JPG, up to 2 MB
                 </p>
@@ -275,7 +251,10 @@ const Cart = () => {
                   required
                 />
               </div>
-              <button type="submit" className="btn btn-secondary text-white w-full my-4">
+              <button
+                type="submit"
+                className="btn btn-secondary text-white w-full my-4"
+              >
                 Kirim
               </button>
             </form>
@@ -285,7 +264,7 @@ const Cart = () => {
         <Footer />
       </WrapperNavbar>
     </>
-  )
+  );
 }
 
 export default Cart

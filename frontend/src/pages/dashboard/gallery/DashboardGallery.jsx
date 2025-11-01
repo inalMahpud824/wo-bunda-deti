@@ -4,7 +4,7 @@ import { Loading } from "../../../components/loading/Loading"
 import { ModalSuccess } from "../../../components/modal/ModalSuccess"
 import ModalConfirm from "../../../components/modal/ModalConfirm"
 import { Link } from "react-router-dom"
-import { baseURL, instance } from "../../../axios"
+import { instance } from "../../../axios"
 import formatDate from "../../../utils/formatTimestamp"
 
 const DashboardGallery = () => {
@@ -65,7 +65,7 @@ const DashboardGallery = () => {
                       <tr key={item.id}>
                         <td>{item.id}</td>
                         <td>
-                          <img src={`${baseURL}/uploads/${item.photo}`} alt="" width={70}
+                          <img src={`${item.photo}`} alt="" width={70}
                             className="mx-auto"
                           />
                         </td>

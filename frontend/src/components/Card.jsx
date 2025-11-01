@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
 import { truncateText } from "../utils/truncateText";
-import { baseURL } from "../axios";
 
 const Card = ({title,description, img, id}) => {
   return(
     <Link to={`/service/${id}`} className=" hover:shadow-xl  card bg-white w-80 md:min-h-[27rem] md:max-h-[27rem] shadow-sm">
       <figure className="md:min-h-52 md:max-h-52 min-h-32 max-h-32">
         <img
-          src={`${baseURL}/uploads/${img}`}
+          src={`${img}`}
           alt="Shoes" 
           className="w-full object-cover"
           />

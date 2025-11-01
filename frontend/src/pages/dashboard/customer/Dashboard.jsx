@@ -1,4 +1,3 @@
-import WrapperDashboard from "../../../components/WrapperDashboard"
 import WrapperDashboardCustomer from "../../../components/WrapperDashboardCustomer"
 
 const Dashboard = () => {

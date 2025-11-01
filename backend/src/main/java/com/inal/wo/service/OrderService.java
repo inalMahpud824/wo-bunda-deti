@@ -1,6 +1,5 @@
 package com.inal.wo.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -26,6 +25,7 @@ import com.inal.wo.entity.Product;
 import com.inal.wo.entity.User;
 import com.inal.wo.model.request.ChangeStatusOrderRequest;
 import com.inal.wo.model.request.OrderRequest;
+import com.inal.wo.model.response.CloudinaryResponse;
 import com.inal.wo.model.response.ItemOrderResponse;
 import com.inal.wo.model.response.OrderResponse;
 import com.inal.wo.repository.OrderItemRepository;
@@ -49,6 +49,7 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
     private final OrderStatusRepository orderStatusRepository;
     private final UserRepository userRepository;
+    private final UploadFileService uploadFileService;
   
     @Transactional
     public OrderResponse createOrder(OrderRequest request) {
@@ -82,10 +83,6 @@ public class OrderService {
         order.setStatus(status);
         order.setUser(user);
         
-        // Buat folder jika belum ada
-        File dir = new File(UPLOAD_DIR);
-        if(!dir.exists()) dir.mkdirs();
-
         List<Product> products = productRepository.findAllById(request.getProductId());
         if (products.size() != request.getProductId().size()) {
             // Cari ID yang hilang
@@ -103,7 +100,8 @@ public class OrderService {
         
 
         // simpan gambar bukti pembayaran
-        saveFile(request, order);
+        CloudinaryResponse file = uploadFileService.uploadFile(request.getPaymentProof());
+        order.setPaymentProof(file.getSecureUrl());
 
         // buat orderItems
         List<OrderItem> orderItems = new ArrayList<>();
@@ -209,18 +207,6 @@ public class OrderService {
         }
         return response;
         
-    }
-    
-    private void saveFile(OrderRequest request, Order data) {
-        try {
-            String fileName = UUID.randomUUID() + "_" + request.getPaymentProof().getOriginalFilename();
-            Path filePath = Paths.get(UPLOAD_DIR, fileName);
-            Files.copy(request.getPaymentProof().getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            data.setPaymentProof(fileName);
-        } catch (IOException e) {
-            log.error("Gagal menyimpan gambar baru", e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Gagal menyimpan gambar baru");
-        }
     }
 
     private OrderResponse buildOrderResponse (Order order, List<ItemOrderResponse> itemOrderResponses) {

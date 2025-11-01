@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import WrapperNavbar from "../components/WrapperNavbar";
 import { useEffect, useState } from "react";
-import { baseURL, instance } from "../axios";
+import { instance } from "../axios";
 import { formatPrice } from "../utils/formatPrice";
 import Footer from "../components/Footer";
 import { useContact } from "../store/contactStore";
@@ -67,7 +67,7 @@ const ProductDetail = () => {
             <>
               <div className="md:w-[70%] w-full">
                 <img
-                  src={`${baseURL}/uploads/${product.photo}`}
+                  src={`${product.photo}`}
                   alt=""
                   className="rounded-2xl max-h-[27rem] w-full object-cover"
                 />

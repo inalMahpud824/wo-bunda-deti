@@ -29,14 +29,14 @@ const WrapperDashboardCustomer = ({ children, tabActive }) => {
               <ListMenuDashboard
                 text={"Profile"}
                 icon={faBuildingUser}
-                href={"/dashboard/service"}
-                active={tabActive == "product" ? true : false}
+                href={"/dashboard/profile"}
+                active={tabActive == "profile" ? true : false}
               />
               <ListMenuDashboard
                 text={"Riwayat Pembelian"}
                 icon={faImages}
-                href={"/dashboard/gallery"}
-                active={tabActive == "gallery" ? true : false}
+                href={"/dashboard/order/history"}
+                active={tabActive == "history" ? true : false}
               />
             </>
 
@@ -122,14 +122,14 @@ const WrapperDashboardCustomer = ({ children, tabActive }) => {
                   <ListMenuDashboard
                     text={"Profile"}
                     icon={faBuildingUser}
-                    href={"/dashboard/service"}
-                    active={tabActive == "product" ? true : false}
+                    href={"/dashboard/profile"}
+                    active={tabActive == "profile" ? true : false}
                   />
                   <ListMenuDashboard
                     text={"Riwayat Pembelian"}
                     icon={faImages}
-                    href={"/dashboard/gallery"}
-                    active={tabActive == "gallery" ? true : false}
+                    href={"/dashboard/order/history"}
+                    active={tabActive == "history" ? true : false}
                   />
                 </>
 

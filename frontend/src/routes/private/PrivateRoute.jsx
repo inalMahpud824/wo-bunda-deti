@@ -31,6 +31,12 @@ const DashboardGallery = lazy(() =>
 const FormAddGallery = lazy(() =>
   import("../../pages/dashboard/gallery/FormAddGallery")
 );
+const DashboardProfile = lazy(() =>
+  import("../../pages/dashboard/customer/Profile")
+);
+const DashboardHistoryOrder = lazy(() =>
+  import("../../pages/dashboard/customer/DashboardHistoryOrder")
+);
 
 const PrivateRoute = () => {
   const { login, role } = useUser();
@@ -72,6 +78,8 @@ const PrivateRoute = () => {
         <Routes>
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<DashboardCustomer />} />
+            <Route path="/dashboard/profile" element={<DashboardProfile />} />
+            <Route path="/dashboard/order/history" element={<DashboardHistoryOrder />} />
           </Route>
         </Routes>
       </Suspense>
