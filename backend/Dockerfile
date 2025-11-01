@@ -9,6 +9,9 @@ COPY pom.xml .
 COPY mvnw .
 COPY .mvn .mvn
 
+# Beri izin eksekusi ke mvnw
+RUN chmod +x mvnw
+
 # Unduh dependencies agar cache bisa digunakan
 RUN ./mvnw dependency:go-offline
 
