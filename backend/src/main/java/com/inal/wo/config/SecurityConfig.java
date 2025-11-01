@@ -18,8 +18,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.security.config.Customizer;
 
 import com.inal.wo.security.JwtAuthenticationFilter;
-
-import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
@@ -37,7 +35,6 @@ public class SecurityConfig {
             "/uploads/**",
             "/public/**"
     };
-    private final Dotenv dotenv = Dotenv.load();
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -73,9 +70,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // configuration.setAllowedOrigins(List.of("http://localhost:5173", "https://mdjdqvbc-5173.asse.devtunnels.ms"));
-        String origins = dotenv.get("CORS_ALLOWED_ORIGINS");
-        configuration.setAllowedOrigins(List.of(origins.split(",")));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "https://mdjdqvbc-5173.asse.devtunnels.ms"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("*")); // atau daftar header seperti "Authorization", "Content-Type"
         configuration.setAllowCredentials(true); // jika ingin mengirim cookie / header Authorization
