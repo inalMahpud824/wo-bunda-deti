@@ -1,26 +1,33 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../store/userStore";
 import { jwtDecode } from "jwt-decode";
 
-const useTokenValidation = () => {
-  const { login, setLogin } = useUser();
+const useTokenValidation = () => {``
+  const { login, userId, setLogin, setRole, setUserId, } = useUser();
+  const [validating, setValidating] = useState(true);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     try {
       const tokenDecode = jwtDecode(token);
-      const currentTime = Math.floor(Date.now() / 1000); // waktu sekarang dalam detik
+      const currentTime = Math.floor(Date.now() / 1000);
       if (!tokenDecode || tokenDecode.exp < currentTime) {
         localStorage.clear();
         setLogin(false);
-        return;
+      } else {
+        setLogin(true);
+        setRole(tokenDecode.role);
+        setUserId(tokenDecode.userId);
       }
-      setLogin(true);
-    } catch (error) {
-      console.error("Token decoding failed", error);
+    } catch {
+      console.error("Token decoding failed");
       setLogin(false);
+    } finally {
+      setValidating(false);
     }
-  }, [login, setLogin]);
+  }, [setLogin, setRole, setUserId]);
 
-  return { login, setLogin }
-}
+  return { login, validating, userId };
+};
+
 export default useTokenValidation

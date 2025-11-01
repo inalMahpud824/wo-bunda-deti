@@ -42,10 +42,16 @@ public class Product {
     @Column(name = "photo")
     private String photo;
 
+    @Column(name = "public_id")
+    private String publicId;
+    
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "update_at")
     private LocalDateTime updateAt;
+
+    
   
 }

@@ -1,6 +1,5 @@
 package com.inal.wo.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -23,14 +22,18 @@ import com.inal.wo.entity.Order;
 import com.inal.wo.entity.OrderItem;
 import com.inal.wo.entity.OrderStatus;
 import com.inal.wo.entity.Product;
+import com.inal.wo.entity.User;
 import com.inal.wo.model.request.ChangeStatusOrderRequest;
 import com.inal.wo.model.request.OrderRequest;
+import com.inal.wo.model.response.CloudinaryResponse;
 import com.inal.wo.model.response.ItemOrderResponse;
 import com.inal.wo.model.response.OrderResponse;
 import com.inal.wo.repository.OrderItemRepository;
 import com.inal.wo.repository.OrderRepository;
 import com.inal.wo.repository.OrderStatusRepository;
 import com.inal.wo.repository.ProductRepository;
+import com.inal.wo.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,12 +48,17 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderStatusRepository orderStatusRepository;
+    private final UserRepository userRepository;
+    private final UploadFileService uploadFileService;
   
     @Transactional
     public OrderResponse createOrder(OrderRequest request) {
         log.info("Request create order with data {}", request);
         OrderStatus status = orderStatusRepository.findById(request.getOrderStatusId()).orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Status Order tidak ditemukan"));
+
+        User user = userRepository.findById(request.getUserId()).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User tidak ditemukan"));
 
         LocalDate today = LocalDate.now(clock);  
         LocalDate eventDate = request.getEventDate().toLocalDate();
@@ -63,21 +71,18 @@ public class OrderService {
         }
         
         Order order = new Order();
-        order.setAddress(request.getAddress());
-        order.setCustomerName(request.getCustomerName());
+        order.setAddress(user.getAddress());
+        order.setCustomerName(user.getName());
         order.setEventDate(request.getEventDate());
         if (request.getNote() != null) {
             order.setNote(request.getNote());
         }
         order.setOrderDate(LocalDateTime.now(clock));
         order.setUpdateAt(LocalDateTime.now(clock));
-        order.setPhoneNumber(request.getPhoneNumber());
+        order.setPhoneNumber(user.getPhoneNumber());
         order.setStatus(status);
+        order.setUser(user);
         
-            // Buat folder jika belum ada
-        File dir = new File(UPLOAD_DIR);
-        if(!dir.exists()) dir.mkdirs();
-
         List<Product> products = productRepository.findAllById(request.getProductId());
         if (products.size() != request.getProductId().size()) {
             // Cari ID yang hilang
@@ -95,7 +100,8 @@ public class OrderService {
         
 
         // simpan gambar bukti pembayaran
-        saveFile(request, order);
+        CloudinaryResponse file = uploadFileService.uploadFile(request.getPaymentProof());
+        order.setPaymentProof(file.getSecureUrl());
 
         // buat orderItems
         List<OrderItem> orderItems = new ArrayList<>();
@@ -182,17 +188,25 @@ public class OrderService {
         return buildOrderResponse(order, orderItemsRes);
 
     }
-    
-    private void saveFile(OrderRequest request, Order data) {
-        try {
-            String fileName = UUID.randomUUID() + "_" + request.getPaymentProof().getOriginalFilename();
-            Path filePath = Paths.get(UPLOAD_DIR, fileName);
-            Files.copy(request.getPaymentProof().getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            data.setPaymentProof(fileName);
-        } catch (IOException e) {
-            log.error("Gagal menyimpan gambar baru", e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Gagal menyimpan gambar baru");
+
+    public List<OrderResponse> getOrderByUser(Long userId) {
+        log.info("request get order by user id {}", userId);
+
+        User user = userRepository.findById(userId).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        List<Order> listOrder = orderRepository.findAllByUser(user);
+        List<OrderResponse> response = new ArrayList<>();
+        for (Order order : listOrder) {
+            List<OrderItem> items = order.getItems();
+            List<ItemOrderResponse> itemRes = new ArrayList<>();
+            for (OrderItem it : items) {
+                itemRes.add(buildItemOrderResponse(it));
+            }
+            response.add(buildOrderResponse(order, itemRes));
         }
+        return response;
+        
     }
 
     private OrderResponse buildOrderResponse (Order order, List<ItemOrderResponse> itemOrderResponses) {

@@ -94,7 +94,7 @@ const LandingPage = () => {
               {gallery.length > 0 && gallery.slice(0, 3).map((item) => (
                 <img
                   loading="lazy"
-                  src={`${baseURL}/uploads/${item.photo}`}
+                  src={`${item.photo}`}
                   className="rounded-xl object-cover md:w-[20rem]"
                 />
               ))}

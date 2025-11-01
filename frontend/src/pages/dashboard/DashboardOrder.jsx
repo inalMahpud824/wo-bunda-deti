@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Loading } from "../../components/loading/Loading"
 import WrapperDashboard from "../../components/WrapperDashboard"
-import { baseURL, instance } from "../../axios"
+import { instance } from "../../axios"
 import { formatPrice } from "../../utils/formatPrice"
 import ModalDetailProductOrder from "../../components/modal/ModalDetailProductOrder"
 import ModalConfirm from "../../components/modal/ModalConfirm"
@@ -105,7 +105,7 @@ const DashboardOrder = () => {
                     <p className="">{item.note}</p>
                   </td>
                   <td>
-                    <a href={`${baseURL}/uploads/${item.paymentProof}`} target="_blank" className="underline hover:text-blue-600">lihat bukti pembayaran</a>
+                    <a href={`${item.paymentProof}`} target="_blank" className="underline hover:text-blue-600">lihat bukti pembayaran</a>
                   </td>
                   <td>
                     <select

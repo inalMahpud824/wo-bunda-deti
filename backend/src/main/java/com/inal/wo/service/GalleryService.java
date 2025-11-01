@@ -1,15 +1,10 @@
 package com.inal.wo.service;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.inal.wo.entity.Gallery;
+import com.inal.wo.model.response.CloudinaryResponse;
 import com.inal.wo.model.response.GeneralResponse;
 import com.inal.wo.repository.GalleryRepository;
 
@@ -32,6 +28,7 @@ public class GalleryService {
   private final GalleryRepository galleryRepository;
   private static final String UPLOAD_DIR = "uploads";
   private final Clock clock;
+  private final UploadFileService uploadFileService;
 
   @Transactional
   public GeneralResponse<Void> uploadGallery(MultipartFile[] request) {
@@ -43,18 +40,12 @@ public class GalleryService {
 
     List<Gallery> listPhoto = new ArrayList<>();
     for (MultipartFile file : request) {
-      try {
-        String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
-        Path filepath = Paths.get(UPLOAD_DIR, filename);
-        Files.write(filepath, file.getBytes());
+        CloudinaryResponse image =  uploadFileService.uploadFile(file);
         Gallery data = new Gallery();
         data.setCreatedAt(LocalDateTime.now(clock));
-        data.setPhoto(filename);
+        data.setPhoto(image.getSecureUrl());
+        data.setPublicId(image.getPublicId());
         listPhoto.add(data);
-      } catch (Exception e) {
-        log.error("Gagal menyimpan gambar baru api gallery", e);
-        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Gagal menyimpan gambar baru");
-      }
     }
 
     galleryRepository.saveAll(listPhoto);
@@ -76,7 +67,7 @@ public class GalleryService {
         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Photo tidak ditemukan"));
 
     // hapus file
-    deleteFile(photo);
+    uploadFileService.deleteImage(photo.getPublicId());
 
     // hapus data gallery di db
     galleryRepository.delete(photo);
@@ -87,17 +78,18 @@ public class GalleryService {
     return response;
   }
 
-  private void deleteFile(Gallery gallery) {
-    // Hapus file gambar
-    if (gallery.getPhoto() != null) {
-      Path imagePath = Paths.get(UPLOAD_DIR, gallery.getPhoto());
-      try {
-        Files.deleteIfExists(imagePath);
-        log.info("Gambar {} berhasil dihapus", imagePath);
-      } catch (IOException e) {
-        log.error("Gagal menghapus gambar: {}", imagePath, e);
-        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Gagal menghapus gambar gallery");
-      }
-    }
-  }
+  // method simpan gambar di local
+  // private void deleteFile(Gallery gallery) {
+  //   // Hapus file gambar
+  //   if (gallery.getPhoto() != null) {
+  //     Path imagePath = Paths.get(UPLOAD_DIR, gallery.getPhoto());
+  //     try {
+  //       Files.deleteIfExists(imagePath);
+  //       log.info("Gambar {} berhasil dihapus", imagePath);
+  //     } catch (IOException e) {
+  //       log.error("Gagal menghapus gambar: {}", imagePath, e);
+  //       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Gagal menghapus gambar gallery");
+  //     }
+  //   }
+  // }
 }

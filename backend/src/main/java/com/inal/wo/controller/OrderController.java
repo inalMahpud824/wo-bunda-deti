@@ -8,6 +8,7 @@ import com.inal.wo.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,7 @@ public class OrderController {
   
 
   @GetMapping
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<List<OrderResponse>> getAllOrder() {
       return ResponseEntity.ok(orderService.getAllOrders());
   }
@@ -33,9 +35,16 @@ public class OrderController {
   }
 
   @PostMapping("/status/{id}")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<OrderResponse> changeStatusOrder(@PathVariable Long id, 
       @RequestBody ChangeStatusOrderRequest status) {
       
       return ResponseEntity.ok(orderService.changeStatusOrder(status, id));
-  }  
+  }
+  
+  @GetMapping("/customer/{userId}")
+  public ResponseEntity<List<OrderResponse>> getOrderByUserId(@PathVariable Long userId) {
+      return ResponseEntity.ok(orderService.getOrderByUser(userId));
+  }
+  
 }

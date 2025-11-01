@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import com.inal.wo.entity.Product;
 import com.inal.wo.model.request.ProductRequest;
+import com.inal.wo.model.response.CloudinaryResponse;
 import com.inal.wo.model.response.GeneralResponse;
 import com.inal.wo.model.response.ProductResponse;
 import com.inal.wo.repository.ProductRepository;
@@ -31,16 +32,14 @@ public class ProductService {
     private static final String UPLOAD_DIR = "uploads";
     private static final String PRODUCT_NOT_FOUND_MESSAGE = "Product tidak ditemukan";
     private final ProductRepository productRepository;
+    private final UploadFileService uploadFileService;
     
 
     @Transactional
     public ProductResponse createProduct(ProductRequest request) {
-      // Buat folder jika belum ada
-        File dir = new File(UPLOAD_DIR);
-        if(!dir.exists()) dir.mkdirs();
 
         Product data = new Product();
-        saveFile(request, data);
+        CloudinaryResponse image = uploadFileService.uploadFile(request.getPhoto());
 
         data.setActiveStatus(true);
         data.setName(request.getName());
@@ -49,6 +48,8 @@ public class ProductService {
         data.setDescriptionShort(request.getShortDescription());
         data.setCreatedAt(LocalDateTime.now());
         data.setUpdateAt(LocalDateTime.now());
+        data.setPhoto(image.getSecureUrl());
+        data.setPublicId(image.getPublicId());
 
         productRepository.save(data);
         return buildProductRes(data);
@@ -82,7 +83,7 @@ public class ProductService {
         
 
         // Hapus file gambar
-        deleteFile(product);
+        uploadFileService.deleteImage(product.getPublicId());
 
         productRepository.delete(product);
 
@@ -108,10 +109,12 @@ public class ProductService {
         MultipartFile fileNew = request.getPhoto();
         if(fileNew != null && !fileNew.isEmpty()) {
             // hapus file lama
-            deleteFile(product);
+            uploadFileService.deleteImage(product.getPublicId());
 
             // simpan file baru
-            saveFile(request, product);
+            CloudinaryResponse img = uploadFileService.uploadFile(fileNew);
+            product.setPhoto(img.getSecureUrl());
+            product.setPublicId(img.getPublicId());
         }
 
         productRepository.save(product);
@@ -181,7 +184,7 @@ public class ProductService {
         }
     }
 
-    private ProductResponse buildProductRes(Product product) {
+    public ProductResponse buildProductRes(Product product) {
         ProductResponse res = new ProductResponse();
         res.setActiveStatus(product.getActiveStatus());
         res.setId(product.getId());

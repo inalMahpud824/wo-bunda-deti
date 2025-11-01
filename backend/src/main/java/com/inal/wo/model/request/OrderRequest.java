@@ -21,17 +21,11 @@ public class OrderRequest {
     @NotNull
     private LocalDateTime eventDate;
 
-    @NotBlank
-    private String customerName;
-
-    @NotBlank
-    private String phoneNumber;
-
-    @NotBlank
-    private String address;
-
     @NotNull
     private Long orderStatusId;
+
+    @NotNull
+    private Long userId;
 
     private String note;
 

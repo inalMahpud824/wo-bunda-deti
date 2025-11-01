@@ -5,12 +5,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ContactWA from "../components/ContactWA";
 import Footer from "../components/Footer";
 import { useContact } from "../store/contactStore";
-import { baseURL, instance } from "../axios";
+import { instance } from "../axios";
 import { useParams } from "react-router-dom";
 import { Loading } from "../components/loading/Loading";
 import { formatPrice } from "../utils/formatPrice";
 import { ModalError } from "../components/modal/ModalError";
 import { ModalSuccess } from "../components/modal/ModalSuccess";
+import useTokenValidation from "../hooks/useTokenValidation";
 
 const Order = () => {
   const image = useRef();
@@ -20,13 +21,18 @@ const Order = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [dataOrder, setDataOrder] = useState()
   const [error, setError] = useState(null)
+  const {login, userId} = useTokenValidation()
   const {
     phoneNumber,
     bankName,
     accountNumber,
     ownerAccountName } = useContact()
 
-  useEffect(() => {
+  useEffect(() => { 
+    if(!login) {
+      window.location.href = "/login"
+      return
+    }
     const fetch = async () => {
       setIsLoading(true)
       try {
@@ -59,17 +65,15 @@ const handleSubmit = async (e) => {
     const form = new FormData()
     const status = orderStatus.find(item => item.statusName == "MENUNGGU")
     form.append("eventDate", dataOrder.eventDate)
-    form.append("customerName", dataOrder.customerName)
-    form.append("phoneNumber", dataOrder.phoneNumber)
-    form.append("address", dataOrder.address)
     form.append("orderStatusId", status.id)
+    form.append("userId", userId)
     if (dataOrder.note) {
       form.append("note", dataOrder.note)
     }
     form.append("productId", id)
     form.append("paymentProof", image.current.files[0])
     try {
-      await instance.post("/public/order", form, {
+      await instance.post("/order", form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -88,17 +92,21 @@ const handleSubmit = async (e) => {
   }
   return (
     <>
-      {isLoading && <Loading />}
       <WrapperNavbar>
-        <ModalSuccess description={`Berhasil melakukan pemesanan, Jangan lupa untuk konfirmasi ke nomer WhatsApp admin ${phoneNumber} atau bisa klik icon whatsApp di pojok kanan bawah`} 
-          title={"Berhasil"} textButton={"Tutup"} id="modal-success" />
-        <ModalError error={error} setError={setError}/>
-        <div className="w-full px-7 py-7 bg-[#fef9f5] text-black md:px-24">
+      {isLoading && <Loading />}
+        <ModalSuccess
+          description={`Berhasil melakukan pemesanan, Jangan lupa untuk konfirmasi ke nomer WhatsApp admin ${phoneNumber} atau bisa klik icon whatsApp di pojok kanan bawah`}
+          title={"Berhasil"}
+          textButton={"Tutup"}
+          id="modal-success"
+        />
+        <ModalError error={error} setError={setError} />
+        <div className="container mx-auto w-full px-7 py-7 bg-[#fef9f5] text-black md:px-24">
           <h2 className="font-bold text-xl py-6">Layanan yang di pesan</h2>
           {product && (
             <div className="flex items-center gap-4 bg-white rounded-2xl shadow-md p-5">
               <img
-                src={`${baseURL}/uploads/${product.photo}`}
+                src={`${product.photo}`}
                 alt=""
                 width={70}
                 className="rounded-xl"
@@ -112,8 +120,10 @@ const handleSubmit = async (e) => {
 
           <div className="bg-white rounded-2xl shadow-md p-5 my-7">
             <h2 className="text-xl font-semibold py-1">Cara pembayaran</h2>
-            <p>Sebelum mengisi form pastikan nama layanan yang dipesan sesuai.</p>
             <p>
+              Sebelum mengisi form pastikan data pada profile dan nama layanan
+              yang dipesan sesuai. Selain itu minimal tanggal acara{" "}
+              <strong> H +3 yaitu 3 hari setelah hari </strong>
               Silahkan kirim sejumlah uang yang sesuai dengan harga layanan ke
               rekening berikut
             </p>
@@ -122,12 +132,15 @@ const handleSubmit = async (e) => {
               <li>Nomor Rekening: {accountNumber}</li>
               <li>Nama: {ownerAccountName}</li>
             </ul>
-            <h2 className="text-xl font-semibold py-1">Konfirmasi Pembayaran</h2>
+            <h2 className="text-xl font-semibold py-1">
+              Konfirmasi Pembayaran
+            </h2>
             <p>
               Setelah melakukan pembayaran dan mengisi formulir, silahkan
-              konfirmasi ke nomor WhatsApp berikut: <strong>{phoneNumber}</strong>{" "}
-              atau bisa juga konfirmasi ke icon whatsApp yang mengambang di
-              website pojok kanan bawah. Pesanan anda akan diproses lebih lanjut
+              konfirmasi ke nomor WhatsApp berikut:{" "}
+              <strong>{phoneNumber}</strong> atau bisa juga konfirmasi ke icon
+              whatsApp yang mengambang di website pojok kanan bawah. Pesanan
+              anda akan diproses lebih lanjut
             </p>
           </div>
 
@@ -137,25 +150,11 @@ const handleSubmit = async (e) => {
             className="w-full bg-white rounded-xl p-7 mt-6 mx-auto shadow-md"
           >
             <h2 className="text-center font-bold text-lg capitalize">
-              Isi data diri
+              Isi data pemesanan
             </h2>
-            <label htmlFor="customerName" className="font-semibold">
-              Nama Pemesan <FontAwesomeIcon
-                icon={faStarOfLife}
-                className="text-red-500 text-[5px] pb-2"
-              />
-            </label>
-            <input
-              id="customerName"
-              name="customerName"
-              type="text"
-              placeholder="masukan nama pemesan"
-              className="input w-full bg-gray-100 my-4"
-              required
-              onChange={handelChange}
-            />
             <label htmlFor="eventDate" className="font-semibold">
-              Tanggal acara <FontAwesomeIcon
+              Tanggal acara{" "}
+              <FontAwesomeIcon
                 icon={faStarOfLife}
                 className="text-red-500 text-[5px] pb-2"
               />
@@ -164,36 +163,6 @@ const handleSubmit = async (e) => {
               id="eventDate"
               name="eventDate"
               type="datetime-local"
-              className="input w-full bg-gray-100 my-4"
-              required
-              onChange={handelChange}
-            />
-            <label htmlFor="phoneNumber" className="font-semibold">
-              No WhatsApp <FontAwesomeIcon
-                icon={faStarOfLife}
-                className="text-red-500 text-[5px] pb-2"
-              />
-            </label>
-            <input
-              id="phoneNumber"
-              name="phoneNumber"
-              type="text"
-              placeholder="Contoh: 08837123"
-              className="input w-full bg-gray-100 my-4"
-              required
-              onChange={handelChange}
-            />
-            <label htmlFor="address" className="font-semibold">
-              Alamat lengkap <FontAwesomeIcon
-                icon={faStarOfLife}
-                className="text-red-500 text-[5px] pb-2"
-              />
-            </label>
-            <input
-              id="address"
-              name="address"
-              type="text"
-              placeholder="contoh: jl soekarno hatta rt/rw desa kecamatan kabupaten"
               className="input w-full bg-gray-100 my-4"
               required
               onChange={handelChange}
@@ -211,7 +180,8 @@ const handleSubmit = async (e) => {
             />
             <label htmlFor="paymentProof" className="label">
               <span className="label text-black font-semibold">
-                Bukti Pembayaran <FontAwesomeIcon
+                Bukti Pembayaran{" "}
+                <FontAwesomeIcon
                   icon={faStarOfLife}
                   className="text-red-500 text-[5px] pb-2"
                 />
@@ -235,7 +205,10 @@ const handleSubmit = async (e) => {
                 required
               />
             </div>
-            <button type="submit" className="btn btn-secondary text-white w-full my-4">
+            <button
+              type="submit"
+              className="btn btn-secondary text-white w-full my-4"
+            >
               Kirim
             </button>
           </form>

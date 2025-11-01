@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer"
 import WrapperNavbar from "../components/WrapperNavbar"
-import { baseURL, instance } from "../axios";
+import { instance } from "../axios";
 import { Loading } from "../components/loading/Loading";
 import ContactWA from "../components/ContactWA";
 
@@ -29,7 +29,7 @@ const Gallery = () => {
               <div key={i} className="mb-4 break-inside-avoid">
                 <img
                   loading="lazy"
-                  src={`${baseURL}/uploads/${item.photo}`}
+                  src={`${item.photo}`}
                   className="rounded-xl w-full block"
                 />
               </div>
