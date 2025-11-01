@@ -70,7 +70,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:5173", "https://mdjdqvbc-5173.asse.devtunnels.ms"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "https://mdjdqvbc-5173.asse.devtunnels.ms", "https://wo-bunda-deti.vercel.app"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("*")); // atau daftar header seperti "Authorization", "Content-Type"
         configuration.setAllowCredentials(true); // jika ingin mengirim cookie / header Authorization

@@ -21,8 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UploadFileService {
 
     public CloudinaryResponse uploadFile(MultipartFile file) {
-        Dotenv dotenv = Dotenv.load();
-        Cloudinary cloudinary = new Cloudinary(dotenv.get("CLOUDINARY_URL"));
+        Cloudinary cloudinary = new Cloudinary("cloudinary://757911891259513:OkmXIghAK7dIyd5-_LFi1uU27Ds@dsjekrrzq");
             try {
               Map params1 = ObjectUtils.asMap(
                   "use_filename", true,
