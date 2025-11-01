@@ -20,4 +20,5 @@ public class ProductResponse {
     private String photo;
     private String detailDescription;
     private String shortDescription;
+    private Long productId;
 }

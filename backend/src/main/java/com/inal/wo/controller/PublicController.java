@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/public")
+@RequestMapping()
 public class PublicController {
 
     private final ProductService productService;
@@ -36,18 +36,18 @@ public class PublicController {
     private final OrderService orderService;
     private final GalleryService galleryService;
   
-    @GetMapping("/product")
+    @GetMapping("/public/product")
     public ResponseEntity<List<ProductResponse>> getAllProductActive() {
             return ResponseEntity.ok(productService.getAllProductActive());
     }
 
-    @GetMapping("/product/{id}")
+    @GetMapping("/public/product/{id}")
     public ResponseEntity<ProductResponse> getProductActiveById(
             @PathVariable Long id, Authentication auth) {
             return ResponseEntity.ok(productService.getProductActiveById(id));
     }
 
-    @GetMapping("/contact")
+    @GetMapping("/public/contact")
     public ResponseEntity<List<Contact>> getAllContact() {
         return ResponseEntity.ok(contactService.getAllContact());
     }
@@ -59,12 +59,12 @@ public class PublicController {
         return ResponseEntity.ok(orderService.createOrder(request));
     }
 
-    @GetMapping("/order-status")
+    @GetMapping("/public/order-status")
     public ResponseEntity<List<OrderStatus>> getAllOrderStatus() {
         return ResponseEntity.ok(orderService.getAllOrderStatus());  
     }
     
-    @GetMapping("/gallery")
+    @GetMapping("/public/gallery")
     public ResponseEntity<List<Gallery>> getAllGallery() {
         return ResponseEntity.ok(galleryService.getAllPhotoGallery());  
     }

@@ -23,6 +23,7 @@ import com.inal.wo.entity.Order;
 import com.inal.wo.entity.OrderItem;
 import com.inal.wo.entity.OrderStatus;
 import com.inal.wo.entity.Product;
+import com.inal.wo.entity.User;
 import com.inal.wo.model.request.ChangeStatusOrderRequest;
 import com.inal.wo.model.request.OrderRequest;
 import com.inal.wo.model.response.ItemOrderResponse;
@@ -31,6 +32,8 @@ import com.inal.wo.repository.OrderItemRepository;
 import com.inal.wo.repository.OrderRepository;
 import com.inal.wo.repository.OrderStatusRepository;
 import com.inal.wo.repository.ProductRepository;
+import com.inal.wo.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,12 +48,16 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderStatusRepository orderStatusRepository;
+    private final UserRepository userRepository;
   
     @Transactional
     public OrderResponse createOrder(OrderRequest request) {
         log.info("Request create order with data {}", request);
         OrderStatus status = orderStatusRepository.findById(request.getOrderStatusId()).orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Status Order tidak ditemukan"));
+
+        User user = userRepository.findById(request.getUserId()).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User tidak ditemukan"));
 
         LocalDate today = LocalDate.now(clock);  
         LocalDate eventDate = request.getEventDate().toLocalDate();
@@ -63,18 +70,19 @@ public class OrderService {
         }
         
         Order order = new Order();
-        order.setAddress(request.getAddress());
-        order.setCustomerName(request.getCustomerName());
+        order.setAddress(user.getAddress());
+        order.setCustomerName(user.getName());
         order.setEventDate(request.getEventDate());
         if (request.getNote() != null) {
             order.setNote(request.getNote());
         }
         order.setOrderDate(LocalDateTime.now(clock));
         order.setUpdateAt(LocalDateTime.now(clock));
-        order.setPhoneNumber(request.getPhoneNumber());
+        order.setPhoneNumber(user.getPhoneNumber());
         order.setStatus(status);
+        order.setUser(user);
         
-            // Buat folder jika belum ada
+        // Buat folder jika belum ada
         File dir = new File(UPLOAD_DIR);
         if(!dir.exists()) dir.mkdirs();
 
@@ -181,6 +189,26 @@ public class OrderService {
         }
         return buildOrderResponse(order, orderItemsRes);
 
+    }
+
+    public List<OrderResponse> getOrderByUser(Long userId) {
+        log.info("request get order by user id {}", userId);
+
+        User user = userRepository.findById(userId).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        List<Order> listOrder = orderRepository.findAllByUser(user);
+        List<OrderResponse> response = new ArrayList<>();
+        for (Order order : listOrder) {
+            List<OrderItem> items = order.getItems();
+            List<ItemOrderResponse> itemRes = new ArrayList<>();
+            for (OrderItem it : items) {
+                itemRes.add(buildItemOrderResponse(it));
+            }
+            response.add(buildOrderResponse(order, itemRes));
+        }
+        return response;
+        
     }
     
     private void saveFile(OrderRequest request, Order data) {

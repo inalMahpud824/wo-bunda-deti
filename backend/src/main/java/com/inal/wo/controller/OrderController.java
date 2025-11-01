@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class OrderController {
 
     private final OrderService orderService;
   
 
   @GetMapping
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<List<OrderResponse>> getAllOrder() {
       return ResponseEntity.ok(orderService.getAllOrders());
   }
@@ -35,9 +35,16 @@ public class OrderController {
   }
 
   @PostMapping("/status/{id}")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<OrderResponse> changeStatusOrder(@PathVariable Long id, 
       @RequestBody ChangeStatusOrderRequest status) {
       
       return ResponseEntity.ok(orderService.changeStatusOrder(status, id));
-  }  
+  }
+  
+  @GetMapping("/customer/{userId}")
+  public ResponseEntity<List<OrderResponse>> getOrderByUserId(@PathVariable Long userId) {
+      return ResponseEntity.ok(orderService.getOrderByUser(userId));
+  }
+  
 }

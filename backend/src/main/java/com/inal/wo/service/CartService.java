@@ -65,6 +65,7 @@ public class CartService {
       for (Cart cart : carts) {
           ProductResponse res = productService.buildProductRes(cart.getProduct());
           res.setId(cart.getId());
+          res.setProductId(cart.getProduct().getId());
           response.add(res);
       }
       return response;
